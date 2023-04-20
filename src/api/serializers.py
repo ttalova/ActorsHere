@@ -7,23 +7,17 @@ class UserRegistrSerializer(serializers.ModelSerializer):
         model = User
         fields = ("email",)
 
-        # read_only_fields = ("email",)
-
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
-
-    # def save(self, *args, **kwargs):
-    #     user = User(
-    #         email=self.validated_data["email"],
-    #     )
-    #     password = self.validated_data["password"]
-    #     user.set_password(password)
-    #     user.save()
-    #     return user
 
 
 class StatusSerializer(serializers.Serializer):
     status = serializers.CharField()
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=255)
 
 
 class TokenResponseSerializer(serializers.Serializer):

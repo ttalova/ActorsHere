@@ -18,6 +18,11 @@ const router = createRouter({
             path: '/castings',
             name: 'castings',
             component: () => import('../views/CastingsVacancies.vue')
+        },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: () => import('../components/Logout.vue')
         }
     ]
 })

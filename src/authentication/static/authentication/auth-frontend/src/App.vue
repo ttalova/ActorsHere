@@ -6,13 +6,15 @@ import TabMenu from 'primevue/tabmenu';
 const items = ref([
   {
     label: 'Вход',
-    icon: 'pi pi-fw pi-home',
     to: '/login'
   },
   {
     label: 'Регистрация',
-    icon: 'pi pi-fw pi-calendar',
     to: '/registr'
+  },
+    {
+    label: 'Выход',
+    to: '/logout'
   }
 ]);
 </script>
@@ -27,8 +29,4 @@ const items = ref([
 </template>
 
 <style scoped>
-.main {
-  top: -200px;
-  right: 300px
-}
 </style>
