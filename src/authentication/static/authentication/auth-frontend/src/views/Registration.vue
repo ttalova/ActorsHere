@@ -17,13 +17,14 @@
 
 import {API_URL} from "../consts";
 import axios from 'axios';
+import {useToast} from "primevue/useToast"
 
 export default {
   name: "Registration",
   data() {
     return {
       isLoading: false,
-      backendStatusText: 'before',
+      backendStatusText: '',
       email: '',
       password: ''
     }
@@ -35,26 +36,27 @@ export default {
     passwordHandler(password) {
       this.password = password.target.value
     },
-    submitForm () {
+    submitForm() {
       this.isLoading = true;
-      axios.post(`${API_URL}/api/registr/`, { 'email': `${this.email}`,
-          'password': `${this.password}`})
-      .then(response => {
-        if (response.data == 201) {
-           this.backendStatusText = 'Вы успешно зарегистрированы';
-        }
-        else {
-          this.backendStatusText = 'Аккаунт с такой почтой уже существует';
-        }
-            // window.location = `/instruction/wishes/${this.lecturer_id}/`;
+      axios.post(`${API_URL}/api/registr/`, {
+        'email': `${this.email}`,
+        'password': `${this.password}`
+      })
+          .then(response => {
+            if (response.data == 201) {
+              this.backendStatusText = 'Вы успешно зарегистрированы';
+            } else {
+              this.backendStatusText = 'Аккаунт с такой почтой уже существует';
+            }
+            window.location = `/castings`;
           })
           .catch(error => {
-            this.backendStatusText = 'Временные неполадки, попробуйте позже!';
+            this.backendStatusText = 'Неизвестная ошибка, попробуйте позже';
             console.log(error);
           })
-       .finally(() => {
-      this.isLoading = false;
-    });
+          .finally(() => {
+            this.isLoading = false;
+          });
 
     }
   }
