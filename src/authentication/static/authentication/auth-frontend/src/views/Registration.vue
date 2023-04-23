@@ -1,15 +1,34 @@
 <template>
   <div>
-    <p v-if="isLoading" class="alert alert-info">Загрузка...</p>
-    <form class="login" @submit.prevent="login">
-      <h1>Регистрация</h1>
+    <b-form @submit.prevent="onSubmit">
+      <b-form-group
+          id="input-group-1"
+          label="Электронная почта:"
+          label-for="input-1"
+      >
+        <b-form-input
+            id="input-1"
+            v-model="form.email"
+            type="email"
+            placeholder="Введите почту"
+            required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group id="input-group-2" label="Пароль:" label-for="input-2">
+        <b-form-input
+            id="input-2"
+            v-model="form.password"
+            placeholder="Введите пароль"
+             type="password"
+            required
+        ></b-form-input>
+      </b-form-group>
+
+
+      <b-button type="submit" variant="primary">Зарегистрироваться</b-button>
       <p>{{ backendStatusText }}</p>
-      <label>Email </label>
-      <input required v-model="email" type="email" @change="emailHandler" placeholder="email" te/><br><br>
-      <label>Password </label>
-      <input required v-model="password" @change="passwordHandler" type="password" placeholder="Password"/><br><br>
-      <button type="submit" @click="submitForm" :disabled="this.isLoading">Зарегистрироваться</button>
-    </form>
+    </b-form>
   </div>
 </template>
 
@@ -24,27 +43,24 @@ export default {
     return {
       isLoading: false,
       backendStatusText: '',
-      email: '',
-      password: ''
+      form: {
+        email: '',
+        password: ''
+      },
     }
   },
   methods: {
-    emailHandler(email) {
-      this.email = email.target.value
-    },
-    passwordHandler(password) {
-      this.password = password.target.value
-    },
-    submitForm() {
+    onSubmit() {
       this.isLoading = true;
+      console.log(this.form['email'])
       axios.post(`${API_URL}/api/registr/`, {
-        'email': `${this.email}`,
-        'password': `${this.password}`
+        'email': `${this.form['email']}`,
+        'password': `${this.form['password']}`
       })
           .then(response => {
-            if (response.data == 201) {
+            if (response.status == 201) {
               this.backendStatusText = 'Вы успешно зарегистрированы';
-               window.location = `/castings`;
+              window.location = `/castings`;
             } else {
               this.backendStatusText = 'Аккаунт с такой почтой уже существует';
             }

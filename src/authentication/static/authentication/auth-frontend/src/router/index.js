@@ -20,6 +20,11 @@ const router = createRouter({
             component: () => import('../views/CastingsVacancies.vue')
         },
         {
+            path: '/profile',
+            name: 'profile',
+            component: () => import('../views/Profile.vue')
+        },
+        {
             path: '/logout',
             name: 'logout',
             component: () => import('../components/Logout.vue')
