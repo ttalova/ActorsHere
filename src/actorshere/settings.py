@@ -140,16 +140,35 @@ AUTH_USER_MODEL = "authentication.User"
 #         "rest_framework.authentication.SessionAuthentication",
 #     ],
 # }
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     'PAGE_SIZE': 10,
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.BasicAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.TokenAuthentication',
+#     ]
+# }
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 10,
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
+    "PAGE_SIZE": 10,
 }
-DJOSER = {
-    "ACTIVATION_URL": "#/activate/{uid}/{token}",
-    "SEND_ACTIVATION_EMAIL": False,
+# DJOSER = {
+#     "ACTIVATION_URL": "#/activate/{uid}/{token}",
+#     "SEND_ACTIVATION_EMAIL": False,
+# }
+#
+# SIMPLE_JWT = {
+#     'AUTH_HEADER_TYPES': ('JWT',)
+# }
+
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {"api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}},
 }
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
