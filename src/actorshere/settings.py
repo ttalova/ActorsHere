@@ -26,8 +26,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+DEBUG = os.environ.get("DEBUG", "true").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1:8000",
+]
 
 # Application definition
 
@@ -172,3 +178,7 @@ SWAGGER_SETTINGS = {
 }
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+
+CORS_ALLOW_HEADERS = ["athorization", "content-type"]
+
+AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)

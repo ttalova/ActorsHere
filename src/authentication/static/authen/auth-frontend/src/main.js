@@ -1,5 +1,5 @@
-import { createPinia } from 'pinia'
-import Vue, { createApp } from '@vue/compat';
+import {createPinia} from 'pinia'
+import Vue, {createApp} from '@vue/compat';
 import BootstrapVue from "bootstrap-vue";
 import App from './App.vue'
 import router from './router'

@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-form @submit.prevent="onSubmit">
+      <h1>Регистрация</h1>
       <b-form-group
           id="input-group-1"
           label="Электронная почта:"
@@ -20,7 +21,7 @@
             id="input-2"
             v-model="form.password"
             placeholder="Введите пароль"
-             type="password"
+            type="password"
             required
         ></b-form-input>
       </b-form-group>
@@ -33,47 +34,27 @@
 </template>
 
 <script>
-
-import {API_URL} from "../consts";
-import axios from 'axios';
-
+import {useRegistrStore} from "../stores/registr";
+import {mapActions, mapState} from "pinia/dist/pinia";
 export default {
-  name: "Auth",
+  name: "Registration",
   data() {
     return {
-      isLoading: false,
-      backendStatusText: '',
       form: {
-        email: '',
-        password: ''
-      },
+        email: "",
+        password: ""
+      }
     }
   },
   methods: {
-    onSubmit() {
-      this.isLoading = true;
-      console.log(this.form['email'])
-      axios.post(`${API_URL}/api/registr/`, {
-        'email': `${this.form['email']}`,
-        'password': `${this.form['password']}`
-      })
-          .then(response => {
-            if (response.status == 201) {
-              this.backendStatusText = 'Вы успешно зарегистрированы';
-              window.location = `/castings`;
-            } else {
-              this.backendStatusText = 'Аккаунт с такой почтой уже существует';
-            }
-          })
-          .catch(error => {
-            this.backendStatusText = 'Неизвестная ошибка, попробуйте позже';
-            console.log(error);
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-
+    ...mapActions(useRegistrStore, ['registration']),
+    async onSubmit() {
+      await this.registration(this.form.email, this.form.password);
     }
+  },
+  computed: {
+    ...mapState(useRegistrStore, ['error', 'isLoading']),
+
   }
 }
 </script>

@@ -5,6 +5,12 @@ from authentication.models import User
 from core_app.models import Casting, EmployerProfile
 
 
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "email", "role")
+
+
 class UserRegistrSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -12,9 +18,6 @@ class UserRegistrSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
-
-    def validate_password(self, value: str) -> str:
-        return make_password(value)
 
 
 class StatusSerializer(serializers.Serializer):
