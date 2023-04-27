@@ -12,3 +12,19 @@ import MainHeader from "./components/MainHeader.vue";
 
 <style scoped>
 </style>
+
+<script>
+
+
+import {useAuthStore} from "./stores/auth";
+import {mapActions} from "pinia/dist/pinia";
+
+
+export default {
+    name: "App",
+    created() {
+        this.load()
+    },
+    methods: mapActions(useAuthStore, ['load'])
+}
+</script>

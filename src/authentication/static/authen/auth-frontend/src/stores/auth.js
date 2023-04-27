@@ -2,13 +2,13 @@ import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
 import {getProfile, login as api_login} from "../services/api";
-import {storeToken} from "../services/LocalData";
+import {getToken, storeToken} from "../services/LocalData";
 
 
 export const useAuthStore = defineStore('auth', {
     state: () => {
         return {
-            token: null,
+            token: getToken(),
             isLoading: false,
             error: null,
             user: null
@@ -30,8 +30,9 @@ export const useAuthStore = defineStore('auth', {
         },
         async load() {
             this.isLoading = true;
-            const data = await getProfile(this.token);
+            const data = await getProfile();
             this.user = data;
+            console.log(data)
             this.isLoading = false;
         }
     }

@@ -179,6 +179,6 @@ SWAGGER_SETTINGS = {
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
-CORS_ALLOW_HEADERS = ["athorization", "content-type"]
+# CORS_ALLOW_HEADERS = ["aгthorization", "content-type"]
 
 AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)

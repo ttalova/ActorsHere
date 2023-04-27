@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from api.serializers import (
     UserRegistrSerializer,
     TokenResponseSerializer,
-    EmployerProfileSerializers,
     ProfileSerializer,
 )
 from authentication.models import User
@@ -61,11 +60,6 @@ def status_view(request):
 # permission_classes = (ISAuthenticated)
 #   serializer_class = LoginSerializer
 #   renderer_classes = (TokenAuthentication)
-
-
-class EmployerProfileView(APIView):
-    permission_classes = (AllowAny,)
-    serializer_class = EmployerProfileSerializers
 
 
 @swagger_auto_schema(method="GET", responses={status.HTTP_200_OK: ProfileSerializer()})

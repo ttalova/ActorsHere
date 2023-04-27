@@ -36,6 +36,7 @@ import {useAuthStore} from "../stores/auth";
 import {mapState} from "pinia/dist/pinia";
 import {delToken} from "../services/LocalData";
 import {FRONT_URL} from "./consts";
+import {useRegistrStore} from "../stores/registr";
 
 export default {
   name: "MainHeader",

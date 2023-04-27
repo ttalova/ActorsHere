@@ -1,5 +1,7 @@
 <template>
   <div>
+    <b-alert variant="success" show v-if="isSuccess">Вы успешно зарегистрированы!</b-alert>
+    <b-alert variant="danger" show v-if="error">{{ error }}</b-alert>
     <b-form @submit.prevent="onSubmit">
       <h1>Регистрация</h1>
       <b-form-group
@@ -52,7 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(useRegistrStore, ['error', 'isLoading']),
+    ...mapState(useRegistrStore, ['error', 'isLoading', 'isSuccess']),
 
   }
 }

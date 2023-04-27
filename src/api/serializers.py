@@ -33,7 +33,7 @@ class TokenResponseSerializer(serializers.Serializer):
     token = serializers.CharField()
 
 
-class EmployerProfileSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = EmployerProfile
-        fields = "__all__"
+# class EmployerProfileSerializers(serializers.ModelSerializer):
+#     class Meta:
+#         model = EmployerProfile
+#         fields = ('email', 'password')

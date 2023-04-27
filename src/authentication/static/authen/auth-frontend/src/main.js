@@ -14,4 +14,5 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 Vue.use(BootstrapVue)
+
 app.mount('#app')
