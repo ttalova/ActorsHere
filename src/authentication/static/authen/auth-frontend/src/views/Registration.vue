@@ -28,7 +28,6 @@
 
 
       <b-button type="submit" variant="primary">Зарегистрироваться</b-button>
-      <p>{{ backendStatusText }}</p>
     </b-form>
   </div>
 </template>

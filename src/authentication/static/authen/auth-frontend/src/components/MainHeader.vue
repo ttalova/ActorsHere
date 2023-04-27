@@ -8,6 +8,7 @@
       <b-navbar-nav>
         <b-nav-item v-if="!user" :to="{name: 'login'}">Вход</b-nav-item>
         <b-nav-item v-if="!user" :to="{name: 'registration'}">Регистрация</b-nav-item>
+        <b-nav-item v-if="user" v-on:click="logout">Выход</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -33,10 +34,18 @@
 <script>
 import {useAuthStore} from "../stores/auth";
 import {mapState} from "pinia/dist/pinia";
+import {delToken} from "../services/LocalData";
+import {FRONT_URL} from "./consts";
 
 export default {
   name: "MainHeader",
-  computed: mapState(useAuthStore, ['user'])
+  computed: mapState(useAuthStore, ['user']),
+  methods: {
+    logout: function () {
+      delToken()
+      window.location = `${FRONT_URL}/login`
+    }
+  }
 }
 </script>
 
