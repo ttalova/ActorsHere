@@ -1,9 +1,10 @@
 <template>
+<p>Actors</p>
 </template>
 
 <script>
 export default {
-  name: "Logout"
+  name: "ActorsView"
 }
 </script>
 

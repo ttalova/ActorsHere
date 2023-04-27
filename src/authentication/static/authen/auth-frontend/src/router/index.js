@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Registration from '../views/Registration.vue'
+import Registration from '../views/RegistrationView.vue'
+import {useAuthStore} from "../stores/auth";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,14 +8,34 @@ const router = createRouter({
         {
             path: '/registr',
             name: 'registration',
-            component: Registration
+            component: Registration,
+            meta: {unauthorizedAccess: true}
         },
         {
             path: '/login',
             name: 'login',
-            component: () => import('../views/Login.vue')
+            component: () => import('../views/LoginView.vue'),
+            meta: {unauthorizedAccess: true}
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: () => import('../views/ProfileView.vue')
+        },
+        {
+            path: '/actors',
+            name: 'actors',
+            component: () => import('../views/ActorsView.vue'),
+            meta: {unauthorizedAccess: true}
         },
     ]
+});
+router.beforeEach((to, from) => {
+    const authStore = useAuthStore();
+    const isUnauthorizedAccessAllowed = to.meta?.unauthorizedAccess === true
+    if (!authStore.isAuth && !isUnauthorizedAccessAllowed && from.name !== 'login') {
+        return ({name: 'login'});
+    }
 })
 
 export default router

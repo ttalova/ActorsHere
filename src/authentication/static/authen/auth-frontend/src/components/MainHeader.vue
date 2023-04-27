@@ -6,9 +6,9 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item v-if="!user" :to="{name: 'login'}">Вход</b-nav-item>
-        <b-nav-item v-if="!user" :to="{name: 'registration'}">Регистрация</b-nav-item>
-        <b-nav-item v-if="user" v-on:click="logout">Выход</b-nav-item>
+        <b-nav-item v-if="!isAuth" :to="{name: 'login'}">Вход</b-nav-item>
+        <b-nav-item v-if="!isAuth" :to="{name: 'registration'}">Регистрация</b-nav-item>
+        <b-nav-item v-if="isAuth" v-on:click="logoutClickHandler">Выход</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -21,9 +21,9 @@
         <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
           <template #button-content>
-            <b-nav-item v-if="user">Профиль</b-nav-item>
+            <b-nav-item v-if="isAuth">Профиль</b-nav-item>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
+          <b-dropdown-item :to="{name: 'profile'}">Profile</b-dropdown-item>
           <b-dropdown-item href="#">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -33,18 +33,18 @@
 
 <script>
 import {useAuthStore} from "../stores/auth";
-import {mapState} from "pinia/dist/pinia";
-import {delToken} from "../services/LocalData";
-import {FRONT_URL} from "./consts";
-import {useRegistrStore} from "../stores/registr";
+import {mapActions, mapState} from "pinia/dist/pinia";
 
 export default {
   name: "MainHeader",
-  computed: mapState(useAuthStore, ['user']),
+  computed: {
+    ...mapState(useAuthStore, ['user', 'isAuth'])
+  },
   methods: {
-    logout: function () {
-      delToken()
-      window.location = `${FRONT_URL}/login`
+    ...mapActions(useAuthStore, ['logout']),
+    logoutClickHandler() {
+      this.logout();
+      this.$router.push({name: "actors"});
     }
   }
 }
