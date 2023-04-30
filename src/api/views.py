@@ -2,23 +2,28 @@ import time
 
 from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from api.serializers import (
     UserRegistrSerializer,
     TokenResponseSerializer,
     ProfileSerializer,
+    ActorsSerializer,
+    TagSerializer,
 )
 from authentication.models import User
 
 from api.serializers import StatusSerializer, LoginSerializer
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
+
+from core_app.models import ActorProfile, Tag
 
 
 class RegistrUserView(APIView):
@@ -67,3 +72,18 @@ def status_view(request):
 def profile_view(request):
     serializer = ProfileSerializer(request.user)
     return Response(serializer.data)
+
+
+class ActorsView(ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = ActorsSerializer
+    queryset = ActorProfile.objects.all()
+
+
+class TagsViewSet(mixins.ListModelMixin, GenericViewSet):
+    pagination_class = None
+    serializer_class = TagSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        return Tag.objects.all()

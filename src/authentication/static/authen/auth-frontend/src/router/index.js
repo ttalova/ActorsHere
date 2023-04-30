@@ -25,7 +25,7 @@ const router = createRouter({
         {
             path: '/actors',
             name: 'actors',
-            component: () => import('../views/ActorsView.vue'),
+            component: () => import('../views/MainView.vue'),
             meta: {unauthorizedAccess: true}
         },
     ]

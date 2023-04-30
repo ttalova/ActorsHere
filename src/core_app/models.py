@@ -7,17 +7,23 @@ from authentication.models import User
 class City(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 # class AdditionalPhoto(models.Model):
 #     link = models.ImageField()
 
 
-class TAG(models.Model):
+class Tag(models.Model):
     title = models.CharField()
+
+    def __str__(self):
+        return f"{self.title}"
 
 
 class ActorExperience(models.Model):
-    tag = models.ManyToManyField(TAG)
+    tag = models.ManyToManyField(Tag)
     description = models.CharField()
 
 
@@ -168,7 +174,7 @@ class Casting(models.Model):
     actor_type_description = models.CharField()
     min_actor_age = models.IntegerField(blank=True, null=True)
     max_actor_age = models.IntegerField(blank=True, null=True)
-    tag = models.ManyToManyField(TAG)
+    tag = models.ManyToManyField(Tag)
     end_of_application = models.DateField()
     date_of_event = models.DateField()
     phone_number = models.CharField(max_length=17, blank=True, null=True)

@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', {
             user: null
         }
     },
-    getter: {
+    getters: {
         isAuth() {
             return this.user !== null;
         }

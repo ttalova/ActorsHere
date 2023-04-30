@@ -44,3 +44,14 @@ export async function getProfile() {
     const response = await instance.get('/profile/')
     return await response.data;
 }
+
+
+export async function getActors() {
+     const response = await instance.get("/actors/", );
+    return response.data;
+}
+
+export async function getTags() {
+     const response = await instance.get("/tags/", );
+    return response.data;
+}

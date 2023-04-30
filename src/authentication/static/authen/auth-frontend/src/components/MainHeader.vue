@@ -9,6 +9,7 @@
         <b-nav-item v-if="!isAuth" :to="{name: 'login'}">Вход</b-nav-item>
         <b-nav-item v-if="!isAuth" :to="{name: 'registration'}">Регистрация</b-nav-item>
         <b-nav-item v-if="isAuth" v-on:click="logoutClickHandler">Выход</b-nav-item>
+        <b-nav-item :to="{name: 'actors'}">Актеры</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
