@@ -1,6 +1,8 @@
 import time
 
 from django.contrib.auth import authenticate
+from django_filters.rest_framework import DjangoFilterBackend
+
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
 from rest_framework.decorators import api_view, permission_classes
@@ -10,6 +12,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
+from api.filters import ActorsFilter
 from api.serializers import (
     UserRegistrSerializer,
     TokenResponseSerializer,
@@ -75,6 +78,8 @@ def profile_view(request):
 
 
 class ActorsView(ModelViewSet):
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ActorsFilter
     permission_classes = (AllowAny,)
     serializer_class = ActorsSerializer
     queryset = ActorProfile.objects.all()

@@ -22,9 +22,9 @@ class Tag(models.Model):
         return f"{self.title}"
 
 
-class ActorExperience(models.Model):
-    tag = models.ManyToManyField(Tag)
-    description = models.CharField()
+# class ActorExperience(models.Model):
+#     tag = models.ManyToManyField(Tag)
+#     description = models.CharField()
 
 
 class ProjectType(models.Model):
@@ -146,7 +146,8 @@ class ActorProfile(models.Model):
     education = models.CharField()
     language_proficiency = models.CharField()
     skills = models.CharField()
-    experience = models.ForeignKey(ActorExperience, on_delete=models.SET_NULL, blank=True, null=True)
+    # experience = models.ForeignKey(ActorExperience, on_delete=models.SET_NULL, blank=True, null=True)
+    tag = models.ManyToManyField(Tag)
     willing_to_relocate = models.BooleanField(choices=BOOL_CHOICES)
     international_passport = models.BooleanField(choices=BOOL_CHOICES)
     driver_license = models.BooleanField(choices=BOOL_CHOICES)

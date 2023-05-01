@@ -46,8 +46,8 @@ export async function getProfile() {
 }
 
 
-export async function getActors() {
-     const response = await instance.get("/actors/", );
+export async function getActors(params) {
+     const response = await instance.get("/actors/", {params});
     return response.data;
 }
 

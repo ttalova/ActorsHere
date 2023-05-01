@@ -6,7 +6,7 @@
             <ActorsView/>
       </b-col>
       <b-col md="3">
-        <FiltersActorContainer/>
+        <FiltersActorContainer @submit="submit"/>
       </b-col>
     </b-row>
   </main>
@@ -20,7 +20,12 @@ import FiltersActorContainer from "../containers/SearchActorContainer.vue";
 export default {
   name: "MainView",
   components: {FiltersActorContainer, ActorsView},
-  computed: mapState(useActorsStore, ['isLoading'])
+  computed: mapState(useActorsStore, ['isLoading']),
+  methods: {
+    submit(params) {
+      this.$router.push({query: params})
+    }
+  }
 }
 </script>
 

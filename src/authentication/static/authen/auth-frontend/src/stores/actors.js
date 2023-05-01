@@ -21,7 +21,9 @@ export const useActorsStore = defineStore('actors', {
             this.isLoading = true;
             this.error = null;
             try {
-                const responseData = await getActors();
+                const params = {...this.params,
+                    full_name: this.params.search}
+                const responseData = await getActors(params);
                 this.results = responseData.results;
             } catch (e) {
                 this.error = e.message
@@ -30,6 +32,9 @@ export const useActorsStore = defineStore('actors', {
         },
         setParameter(key, value) {
             this.params[key] = value;
+        },
+        setParameters(params) {
+            this.params = params;
         }
     }
 })
