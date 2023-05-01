@@ -125,7 +125,7 @@ class ActorProfile(models.Model):
     full_name = models.CharField()
     main_photo = models.ImageField(blank=True, null=True)
     birthdate = models.DateField()
-    video_business_card = models.CharField()
+    # video_business_card = models.CharField()
     figure_parameters = models.CharField(blank=True, null=True)
     height = models.PositiveIntegerField()
     weight = models.PositiveIntegerField()

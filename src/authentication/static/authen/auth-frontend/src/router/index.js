@@ -28,6 +28,16 @@ const router = createRouter({
             component: () => import('../views/MainView.vue'),
             meta: {unauthorizedAccess: true}
         },
+         {
+            path: '/actorform',
+            name: 'actorForm',
+            component: () => import('../components/ActorFormComponent.vue'),
+        },
+        {
+            path: '/employerform',
+            name: 'employerForm',
+            component: () => import('../components/EmployerFormComponent.vue'),
+        },
     ]
 });
 router.beforeEach((to, from) => {
