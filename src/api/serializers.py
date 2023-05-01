@@ -6,9 +6,21 @@ from core_app.models import Casting, EmployerProfile, ActorProfile, Tag
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    type_of_profile = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ("id", "email", "role")
+        fields = ("id", "email", "role", "type_of_profile")
+
+    def get_type_of_profile(self, obj):
+        user_actor = ActorProfile.objects.filter(user__email=obj)
+        user_employer = EmployerProfile.objects.filter(user__email=obj)
+        if user_employer:
+            return "employer"
+        elif user_actor:
+            return "actor"
+        else:
+            return None
 
 
 class UserRegistrSerializer(serializers.ModelSerializer):

@@ -26,7 +26,7 @@ from api.serializers import StatusSerializer, LoginSerializer
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 
-from core_app.models import ActorProfile, Tag
+from core_app.models import ActorProfile, Tag, EmployerProfile
 
 
 class RegistrUserView(APIView):
