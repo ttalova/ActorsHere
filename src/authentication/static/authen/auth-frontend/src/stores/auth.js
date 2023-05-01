@@ -11,7 +11,8 @@ export const useAuthStore = defineStore('auth', {
             token: getToken(),
             isLoading: false,
             error: null,
-            user: null
+            user: null,
+            // type_of_profile: null
         }
     },
     getters: {
@@ -37,6 +38,7 @@ export const useAuthStore = defineStore('auth', {
             this.isLoading = true;
             try {
                 this.user = await getProfile();
+                console.log(this.user)
             }
             catch (e) {
                 console.log(e.message);
