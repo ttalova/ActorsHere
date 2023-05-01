@@ -12,7 +12,6 @@ export const useAuthStore = defineStore('auth', {
             isLoading: false,
             error: null,
             user: null,
-            // type_of_profile: null
         }
     },
     getters: {

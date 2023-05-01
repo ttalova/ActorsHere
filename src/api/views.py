@@ -19,6 +19,7 @@ from api.serializers import (
     ProfileSerializer,
     ActorsSerializer,
     TagSerializer,
+    CitySerializer,
 )
 from authentication.models import User
 
@@ -26,7 +27,7 @@ from api.serializers import StatusSerializer, LoginSerializer
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 
-from core_app.models import ActorProfile, Tag, EmployerProfile
+from core_app.models import ActorProfile, Tag, EmployerProfile, City
 
 
 class RegistrUserView(APIView):
@@ -84,6 +85,13 @@ class ActorsView(ModelViewSet):
     serializer_class = ActorsSerializer
     queryset = ActorProfile.objects.all()
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class TagsViewSet(mixins.ListModelMixin, GenericViewSet):
     pagination_class = None
@@ -92,3 +100,12 @@ class TagsViewSet(mixins.ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return Tag.objects.all()
+
+
+class CityViewSet(mixins.ListModelMixin, GenericViewSet):
+    pagination_class = None
+    serializer_class = CitySerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        return City.objects.all()

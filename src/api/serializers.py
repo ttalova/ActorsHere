@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import make_password
 from djoser.serializers import UserSerializer
 from rest_framework import serializers
 from authentication.models import User
-from core_app.models import Casting, EmployerProfile, ActorProfile, Tag
+from core_app.models import EmployerProfile, ActorProfile, Tag, City
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -49,9 +49,22 @@ class ActorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActorProfile
         fields = "__all__"
+        read_only_fields = (
+            "form_active",
+            "rating",
+        )
+
+    def create(self, validated_data):
+        return ActorProfile.objects.create(**validated_data)
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ("id", "title")
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ("id", "name")

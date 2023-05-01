@@ -56,4 +56,20 @@ export async function getTags() {
     return response.data;
 }
 
+export async function getCities() {
+     const response = await instance.get("/cities/", );
+    return response.data;
+}
+
+export async function actorform(params) {
+    const response = await instance.post('/actors/', {params});
+    if (response.status === 500) {
+        throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
+    }
+    // python: response.status in (400, 401)
+    if ([400, 401].includes(response.status)) {
+        throw new Error(response.data.detail);
+    }
+    return response.data;
+}
 
