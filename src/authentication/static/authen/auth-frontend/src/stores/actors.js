@@ -14,7 +14,7 @@ export const useActorsStore = defineStore('actors', {
                 search: null,
                 tag_id: null
             },
-            form: {},
+            form: {}
         }
     },
     actions: {

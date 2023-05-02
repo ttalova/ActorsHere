@@ -50,7 +50,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useAuthStore, ['login']),
+    ...mapActions(useAuthStore, ['login', 'setAccess', 'setRefresh']),
     async onSubmit() {
       await this.login(this.form.email, this.form.password);
       await nextTick(() =>this.$router.push({name: 'profile'}));

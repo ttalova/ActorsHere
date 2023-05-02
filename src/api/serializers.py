@@ -20,7 +20,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         elif user_actor:
             return "actor"
         else:
-            return None
+            return False
 
 
 class UserRegistrSerializer(serializers.ModelSerializer):

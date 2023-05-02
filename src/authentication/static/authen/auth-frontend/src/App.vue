@@ -6,7 +6,7 @@ import MainHeader from "./components/MainHeader.vue";
 <template>
   <MainHeader/>
   <b-container>
-      <RouterView/>
+    <RouterView/>
   </b-container>
 </template>
 
@@ -17,14 +17,30 @@ import MainHeader from "./components/MainHeader.vue";
 
 
 import {useAuthStore} from "./stores/auth";
-import {mapActions} from "pinia/dist/pinia";
+import {mapActions, mapState} from "pinia/dist/pinia";
 
 
 export default {
-    name: "App",
-    created() {
-        this.load()
-    },
-    methods: mapActions(useAuthStore, ['load'])
+  name: "App",
+  beforeCreate() {
+    useAuthStore().initializeStore();
+    const access = this.access
+  },
+  created() {
+    this.load()
+  },
+  methods: {
+    ...mapActions(useAuthStore, ['initializeStore', 'load', 'getAccess']),
+
+  },
+  computed: {
+    ...mapState(useAuthStore, ['error', 'isLoading', 'access', 'refresh']),
+  },
+  mounted() {
+  setInterval(() => {
+    this.getAccess(this.refresh)
+}, 5000)
+  },
+
 }
 </script>

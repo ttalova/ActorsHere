@@ -1,11 +1,15 @@
-export function storeToken(token) {
-localStorage.setItem('token', token);
+export function storeAccess(access) {
+localStorage.setItem('access', access);
 }
 
-export function getToken() {
-return localStorage.getItem('token');
+export function storeRefresh(refresh) {
+localStorage.setItem('refresh', refresh);
 }
 
-export function clearToken() {
-localStorage.setItem('token', null);
+export function getToken(type) {
+return localStorage.getItem(type);
+}
+
+export function clearToken(type) {
+localStorage.setItem(type, null);
 }

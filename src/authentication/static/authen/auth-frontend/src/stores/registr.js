@@ -2,7 +2,6 @@ import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
 import {getProfile, registration as api_registration} from "../services/api";
-import {storeToken} from "../services/LocalData";
 import {mapActions, mapState} from "pinia/dist/pinia";
 import {useAuthStore} from "./auth";
 
@@ -10,7 +9,7 @@ import {useAuthStore} from "./auth";
 export const useRegistrStore = defineStore('registration', {
     state: () => {
         return {
-            token: null,
+            access: null,
             isLoading: false,
             error: null,
             user: null,
@@ -23,8 +22,8 @@ export const useRegistrStore = defineStore('registration', {
             this.isSuccess = false;
             this.error = null;
             try {
-                const token = await api_registration(email, password);
-                this.token = token;
+                const access = await api_registration(email, password);
+                this.access = access;
                 this.isSuccess = true;
             } catch (e) {
                 this.error = e.message

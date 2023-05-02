@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from datetime import timedelta
 
 from dotenv import load_dotenv, find_dotenv
 
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     "rest_framework_swagger",
     "drf_yasg",
     "django_filters",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -160,6 +162,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
@@ -170,9 +173,7 @@ REST_FRAMEWORK = {
 #     "SEND_ACTIVATION_EMAIL": False,
 # }
 #
-# SIMPLE_JWT = {
-#     'AUTH_HEADER_TYPES': ('JWT',)
-# }
+SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timedelta(minutes=5), "AUTH_HEADER_TYPES": ("JWT",)}
 
 SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {"api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}},
