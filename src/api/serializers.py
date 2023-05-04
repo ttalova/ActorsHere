@@ -41,10 +41,6 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 
-class TokenResponseSerializer(serializers.Serializer):
-    token = serializers.CharField()
-
-
 class ActorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActorProfile

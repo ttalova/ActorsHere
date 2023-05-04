@@ -15,7 +15,6 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from api.filters import ActorsFilter
 from api.serializers import (
     UserRegistrSerializer,
-    TokenResponseSerializer,
     ProfileSerializer,
     ActorsSerializer,
     TagSerializer,
@@ -40,22 +39,6 @@ class RegistrUserView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.create(serializer.validated_data)
         return Response(status=status.HTTP_201_CREATED)
-
-
-class LoginUserView(APIView):
-    permission_classes = (AllowAny,)
-    serializer_class = LoginSerializer
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = authenticate(request, **serializer.validated_data)
-        if user is None:
-            raise AuthenticationFailed()
-        token, created = Token.objects.get_or_create(user=user)
-        response_data = {"token": token.key}
-        response_serializer = TokenResponseSerializer(response_data)
-        return Response(response_serializer.data)
 
 
 @api_view()

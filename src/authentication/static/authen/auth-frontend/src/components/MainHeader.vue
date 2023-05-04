@@ -9,7 +9,8 @@
         <b-nav-item v-if="!isAuth" :to="{name: 'login'}">Вход</b-nav-item>
         <b-nav-item v-if="!isAuth" :to="{name: 'registration'}">Регистрация</b-nav-item>
         <b-nav-item v-if="isAuth" v-on:click="logoutClickHandler">Выход</b-nav-item>
-        <b-nav-item :to="{name: 'actors'}">Актеры</b-nav-item>
+        <b-nav-item :to="{name: 'menu'}">Актеры и Кастинги</b-nav-item>
+        <b-nav-item v-if="isAuth && isEmployer" :to="{name: 'castingform'}">Создать кастинг</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -24,8 +25,13 @@
           <template #button-content>
             <b-nav-item v-if="isAuth">Профиль</b-nav-item>
           </template>
-          <b-dropdown-item :to="{name: 'profile'}">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+          <b-dropdown-item :to="{name: 'profile'}">Профиль</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth" :to="{name: 'favorites'}">Избранное</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth" :to="{name: 'notifications'}">Уведомления</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth && isStaff" :to="{name: 'moderation'}">Модерация</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth && isActor" :to="{name: 'mycastings'}">Мои кастинги</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth && isEmployer" :to="{name: 'responsefromactors'}">Отклики</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth" :to="{name: 'settings'}">Настройки</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -39,7 +45,7 @@ import {mapActions, mapState} from "pinia/dist/pinia";
 export default {
   name: "MainHeader",
   computed: {
-    ...mapState(useAuthStore, ['user', 'isAuth'])
+    ...mapState(useAuthStore, ['user', 'isAuth', 'isStaff', 'isActor', 'isEmployer'])
   },
   methods: {
     ...mapActions(useAuthStore, ['logout']),

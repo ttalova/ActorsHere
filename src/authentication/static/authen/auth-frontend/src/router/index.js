@@ -23,8 +23,8 @@ const router = createRouter({
             component: () => import('../views/ProfileView.vue')
         },
         {
-            path: '/actors',
-            name: 'actors',
+            path: '/menu',
+            name: 'menu',
             component: () => import('../views/MainView.vue'),
             meta: {unauthorizedAccess: true}
         },
@@ -38,6 +38,47 @@ const router = createRouter({
             name: 'employerForm',
             component: () => import('../components/EmployerFormComponent.vue'),
         },
+        {
+            path: '/castingform',
+            name: 'castingform',
+            component: () => import('../components/CastingFormView.vue'),
+        },
+        {
+            path: '/favorites',
+            name: 'favorites',
+            component: () => import('../components/FavoritesView.vue'),
+        },
+        {
+            path: '/notifications',
+            name: 'notifications',
+            component: () => import('../components/NotificationsView.vue'),
+        },
+        {
+            path: '/moderation',
+            name: 'moderation',
+            component: () => import('../components/ModerationView.vue'),
+        },
+        {
+            path: '/mycastings',
+            name: 'mycastings',
+            component: () => import('../components/MyCastingsForActorView.vue'),
+        },
+        {
+            path: '/moderation',
+            name: 'moderation',
+            component: () => import('../components/ModerationView.vue'),
+        },
+        {
+            path: '/responsefromactors',
+            name: 'responsefromactors',
+            component: () => import('../components/ResponseFromActorsView.vue'),
+        },
+        {
+            path: '/settings',
+            name: 'settings',
+            component: () => import('../components/SettingsView.vue'),
+        },
+
     ]
 });
 router.beforeEach((to, from) => {

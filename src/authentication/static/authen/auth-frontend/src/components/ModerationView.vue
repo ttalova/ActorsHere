@@ -1,10 +1,10 @@
 <template>
-<h1>Анкета нанимателя</h1>
+  <h1>moderation</h1>
 </template>
 
 <script>
 export default {
-  name: "EmployerFormComponent"
+  name: "ModerationView"
 }
 </script>
 

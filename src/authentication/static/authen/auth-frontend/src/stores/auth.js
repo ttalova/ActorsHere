@@ -20,7 +20,16 @@ export const useAuthStore = defineStore('auth', {
     getters: {
         isAuth() {
             return this.user !== null;
-        }
+        },
+        isStaff() {
+            return this.user.role === 'staff';
+        },
+        isActor() {
+            return this.user.type_of_profile === 'actor';
+        },
+        isEmployer() {
+            return this.user.type_of_profile === 'employer';
+        },
     },
     actions: {
         async getAccess(refresh) {
@@ -79,7 +88,6 @@ export const useAuthStore = defineStore('auth', {
         },
         logout() {
             this.user = null;
-            // this.token = null;
             this.access = null;
             this.refresh = null
             clearToken('access');

@@ -252,6 +252,12 @@
 <!--            <b-form-select v-model="form.tag" :options="tag" multiple :select-size="4"></b-form-select>-->
 <!--          </b-form-group>-->
           <b-form-group
+              label="Тег:"
+              label-for="input-1"
+          >
+            <b-form-select v-model="form.tag" :options="tag"></b-form-select>
+          </b-form-group>
+          <b-form-group
               label="Готов к переезду:"
               label-for="input-1"
           >
@@ -314,12 +320,12 @@ export default {
   computed: {
     ...mapState(useAuthStore, ['user']),
     ...mapState(useActorsStore, ['isLoading', 'error', 'form']),
-    // tag() {
-    //   return [
-    //     {value: null, text: "Выберите теги"},
-    //     ...this.tags.map(x => ({value: x.id, text: x.title}))
-    //   ]
-    // },
+    tag() {
+      return [
+        {value: null, text: "Выберите тег"},
+        ...this.tags.map(x => ({value: x.id, text: x.title}))
+      ]
+    },
     city() {
       return [
         {value: null, text: "Выберите город"},

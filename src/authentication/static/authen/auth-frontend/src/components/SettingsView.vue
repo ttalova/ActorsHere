@@ -1,10 +1,10 @@
 <template>
-<h1>Анкета нанимателя</h1>
+<h1>Настройки</h1>
 </template>
 
 <script>
 export default {
-  name: "EmployerFormComponent"
+  name: "SettingsView"
 }
 </script>
 

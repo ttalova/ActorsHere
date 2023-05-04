@@ -17,7 +17,7 @@ Including another URLconf
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from api.views import RegistrUserView, LoginUserView, status_view, profile_view, ActorsView, TagsViewSet, CityViewSet
+from api.views import RegistrUserView, status_view, profile_view, ActorsView, TagsViewSet, CityViewSet
 
 router = SimpleRouter()
 router.register("actors", ActorsView, basename="actors"),
@@ -26,7 +26,6 @@ router.register("cities", CityViewSet, basename="cities"),
 
 urlpatterns = [
     path("registr/", RegistrUserView.as_view(), name="registr"),
-    path("login/", LoginUserView.as_view(), name="login"),
     path("status/", status_view, name="status"),
     path("profile/", profile_view, name="profile"),
 ] + router.urls
