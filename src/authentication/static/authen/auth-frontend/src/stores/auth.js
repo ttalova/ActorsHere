@@ -22,9 +22,6 @@ export const useAuthStore = defineStore('auth', {
             return this.user !== null;
         }
     },
-    mutations: {
-
-    },
     actions: {
         async getAccess(refresh) {
             const accessData = {

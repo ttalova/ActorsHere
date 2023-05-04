@@ -38,11 +38,8 @@ class RegistrUserView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.create(serializer.validated_data)
-        token = Token.objects.create(user=user)
-        response_data = {"token": token.key}
-        response_serializer = TokenResponseSerializer(response_data)
-        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        serializer.create(serializer.validated_data)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class LoginUserView(APIView):

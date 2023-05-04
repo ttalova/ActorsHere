@@ -61,7 +61,7 @@ export async function getCities() {
 }
 
 export async function actorform(params) {
-    const response = await instance.post('/api/actors/', params);
+    const response = await instance.post('/api/actors/', {params});
     if (response.status === 500) {
         throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
     }

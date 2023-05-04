@@ -1,4 +1,5 @@
 <template>
+  <h1>Актеры</h1>
   <b-spinner v-if="isLoading"/>
   <b-alert v-if="error" variant="danger" show>{{error}}</b-alert>
   <b-list-group>

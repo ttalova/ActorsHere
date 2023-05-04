@@ -56,6 +56,11 @@ INSTALLED_APPS = [
     "drf_yasg",
     "django_filters",
     "corsheaders",
+    "django.contrib.sites",
+    "allauth.socialaccount.providers.google",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 ]
 
 MIDDLEWARE = [
@@ -183,4 +188,19 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
 # CORS_ALLOW_HEADERS = ["aгthorization", "content-type"]
 
-AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+    }
+}
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"
+
+LOGIN_REDIRECT_URL = "/"

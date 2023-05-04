@@ -147,7 +147,7 @@ class ActorProfile(models.Model):
     language_proficiency = models.CharField()
     skills = models.CharField()
     # experience = models.ForeignKey(ActorExperience, on_delete=models.SET_NULL, blank=True, null=True)
-    # tag = models.ManyToManyField(Tag)
+    tag = models.ForeignKey(Tag, on_delete=models.RESTRICT)
     willing_to_relocate = models.BooleanField(choices=BOOL_CHOICES)
     international_passport = models.BooleanField(choices=BOOL_CHOICES)
     driver_license = models.BooleanField(choices=BOOL_CHOICES)

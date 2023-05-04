@@ -38,7 +38,9 @@ export default {
   },
   mounted() {
   setInterval(() => {
-    this.getAccess(this.refresh)
+    if (this.refresh) {
+      this.getAccess(this.refresh)
+    }
 }, 5000)
   },
 
