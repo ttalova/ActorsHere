@@ -13,22 +13,28 @@ export const useAuthStore = defineStore('auth', {
             refresh: null,
             isLoading: false,
             error: null,
-            user: null,
-            type_of_profile: false
+            user: null
         }
     },
     getters: {
         isAuth() {
-            return this.user !== null;
+            // return this.user !== null
+            return getToken('access') !== null;
         },
         isStaff() {
-            return this.user.role === 'staff';
+            if (this.user) {
+                return this.user.role === 'staff';
+            }
         },
         isActor() {
-            return this.user.type_of_profile === 'actor';
+            if (this.user) {
+                return this.user.type_of_profile === 'actor';
+            }
         },
         isEmployer() {
-            return this.user.type_of_profile === 'employer';
+            if (this.user) {
+                return this.user.type_of_profile === 'employer';
+            }
         },
     },
     actions: {
@@ -77,7 +83,6 @@ export const useAuthStore = defineStore('auth', {
             this.isLoading = true;
             try {
                 this.user = await getProfile();
-                this.type_of_profile = this.user.type_of_profile
             } catch (e) {
                 console.log(e.message);
             }

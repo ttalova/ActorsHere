@@ -41,7 +41,7 @@ export default {
     if (this.refresh) {
       this.getAccess(this.refresh)
     }
-}, 5000)
+}, 50000)
   },
 
 }

@@ -84,6 +84,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
     const authStore = useAuthStore();
     const isUnauthorizedAccessAllowed = to.meta?.unauthorizedAccess === true
+    console.log(authStore.isAuth)
     if (!authStore.isAuth && !isUnauthorizedAccessAllowed && from.name !== 'login') {
         return ({name: 'login'});
     }
