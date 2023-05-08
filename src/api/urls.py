@@ -26,13 +26,17 @@ from api.views import (
     CityViewSet,
     ClientSet,
     EmployersView,
+    ProjectTypeViewSet,
+    CastingsView,
 )
 
 router = SimpleRouter()
 router.register("actors", ActorsView, basename="actors"),
 router.register("employers", EmployersView, basename="employers"),
+router.register("castings", CastingsView, basename="castings"),
 router.register("tags", TagsViewSet, basename="tags"),
 router.register("cities", CityViewSet, basename="cities"),
+router.register("projecttype", ProjectTypeViewSet, basename="projecttype"),
 router.register("clientid", ClientSet, basename="clientid"),
 
 urlpatterns = [

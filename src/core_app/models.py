@@ -160,10 +160,10 @@ class ActorProfile(models.Model):
 
 class Casting(models.Model):
     GENDER = [("not_choice", ""), ("male", "Мужской"), ("female", "Женский"), ("all", "Все")]
-    casting_owner = models.ForeignKey(EmployerProfile, on_delete=models.CASCADE)
+    casting_owner = models.ForeignKey(User, on_delete=models.CASCADE)
     project_type = models.ForeignKey(ProjectType, on_delete=models.RESTRICT)
     city = models.ForeignKey(City, on_delete=models.RESTRICT)
-    photo = models.ImageField()
+    photo = models.ImageField(null=True, blank=True)
     header = models.CharField()
     fee = models.CharField()
     description = models.CharField()
@@ -175,7 +175,7 @@ class Casting(models.Model):
     actor_type_description = models.CharField()
     min_actor_age = models.IntegerField(blank=True, null=True)
     max_actor_age = models.IntegerField(blank=True, null=True)
-    tag = models.ManyToManyField(Tag)
+    tag = models.ForeignKey(Tag, on_delete=models.RESTRICT)
     end_of_application = models.DateField()
     date_of_event = models.DateField()
     phone_number = models.CharField(max_length=17, blank=True, null=True)

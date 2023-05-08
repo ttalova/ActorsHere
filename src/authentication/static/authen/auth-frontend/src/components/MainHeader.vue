@@ -1,16 +1,17 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="info">
-    <b-navbar-brand href="#">NavBar</b-navbar-brand>
+    <b-navbar-brand href="#">ActorsHere</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item v-if="!isAuth" :to="{name: 'login'}">Вход</b-nav-item>
-        <b-nav-item v-if="!isAuth" :to="{name: 'registration'}">Регистрация</b-nav-item>
-        <b-nav-item v-if="isAuth" v-on:click="logoutClickHandler">Выход</b-nav-item>
         <b-nav-item :to="{name: 'menu'}">Актеры и Кастинги</b-nav-item>
         <b-nav-item v-if="isAuth && isEmployer" :to="{name: 'castingform'}">Создать кастинг</b-nav-item>
+        <b-nav-item v-if="!isAuth" :to="{name: 'login'}">Вход</b-nav-item>
+        <b-nav-item v-if="!isAuth" :to="{name: 'registration'}">Регистрация</b-nav-item>
+
+
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -29,9 +30,10 @@
           <b-dropdown-item v-if="isAuth" :to="{name: 'favorites'}">Избранное</b-dropdown-item>
           <b-dropdown-item v-if="isAuth" :to="{name: 'notifications'}">Уведомления</b-dropdown-item>
           <b-dropdown-item v-if="isAuth && isStaff" :to="{name: 'moderation'}">Модерация</b-dropdown-item>
-          <b-dropdown-item v-if="isAuth && isActor" :to="{name: 'mycastings'}">Мои кастинги</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth && isEmployer" :to="{name: 'mycastings'}">Мои кастинги</b-dropdown-item>
           <b-dropdown-item v-if="isAuth && isEmployer" :to="{name: 'responsefromactors'}">Отклики</b-dropdown-item>
           <b-dropdown-item v-if="isAuth" :to="{name: 'settings'}">Настройки</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth" v-on:click="logoutClickHandler">Выход</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>

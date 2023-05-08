@@ -19,12 +19,14 @@ from api.serializers import (
     CitySerializer,
     ClientIdSerializer,
     EmployersSerializer,
+    ProjectTypeSerializer,
+    CastingsSerializer,
 )
 
 from api.serializers import StatusSerializer
 from rest_framework.views import APIView
 
-from core_app.models import ActorProfile, Tag, City, EmployerProfile
+from core_app.models import ActorProfile, Tag, City, EmployerProfile, ProjectType, Casting
 
 
 class RegistrUserView(APIView):
@@ -108,6 +110,15 @@ class CityViewSet(mixins.ListModelMixin, GenericViewSet):
         return City.objects.all()
 
 
+class ProjectTypeViewSet(mixins.ListModelMixin, GenericViewSet):
+    pagination_class = None
+    serializer_class = ProjectTypeSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        return ProjectType.objects.all()
+
+
 class ClientSet(mixins.ListModelMixin, GenericViewSet):
     pagination_class = None
     serializer_class = ClientIdSerializer
@@ -125,7 +136,6 @@ class EmployersView(ModelViewSet):
     queryset = EmployerProfile.objects.all()
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -138,6 +148,41 @@ class EmployersView(ModelViewSet):
         actor = get_object_or_404(self.queryset, user_id=user_id)
         serializer = self.serializer_class(actor)
         return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CastingsView(ModelViewSet):
+    filter_backends = (DjangoFilterBackend,)
+    # filterset_class = ActorsFilter
+    permission_classes = (AllowAny,)
+    serializer_class = CastingsSerializer
+    queryset = Casting.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # @action(detail=True, methods=["GET"], url_path="get_form_by_user_id")
+    # def get_actor_by_user_id(self, request, *args, **kwargs):
+    #     user_id = kwargs.get("pk")
+    #     actor = get_object_or_404(self.queryset, user_id=user_id)
+    #     serializer = self.serializer_class(actor)
+    #     return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)

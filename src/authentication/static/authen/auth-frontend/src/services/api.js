@@ -49,6 +49,11 @@ export async function getTags() {
     return response.data;
 }
 
+export async function getProjectTypes() {
+     const response = await instance.get("/api/projecttype/", );
+    return response.data;
+}
+
 export async function getCities() {
      const response = await instance.get("/api/cities/", );
     return response.data;
