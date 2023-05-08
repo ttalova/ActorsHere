@@ -88,6 +88,18 @@ export async function updateactorform(params) {
     return response.data;
 }
 
+export async function deleteactorform(form_id) {
+    const response = await instance.delete(`/api/actors/${form_id}/`);
+    if (response.status === 500) {
+        throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
+    }
+    // python: response.status in (400, 401)
+    if ([400, 401].includes(response.status)) {
+        throw new Error(response.data.detail);
+    }
+    return response.data;
+}
+
 export async function getAccess(params) {
      const response = await instance.post('/auth/jwt/refresh/', params);
      if (response.status === 500) {

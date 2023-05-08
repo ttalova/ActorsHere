@@ -1,7 +1,7 @@
 import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
-import {actorform, getActorForm, getActors, updateactorform} from "../services/api";
+import {actorform, deleteactorform, getActorForm, getActors, updateactorform} from "../services/api";
 
 
 export const useActorsStore = defineStore('actors', {
@@ -31,6 +31,13 @@ export const useActorsStore = defineStore('actors', {
         async getMyForm(user_id) {
             try {
                 return await getActorForm(user_id)
+            } catch(e) {
+                console.log(e)
+            }
+        },
+        async deleteMyForm(form_id) {
+            try {
+                return await deleteactorform(form_id)
             } catch(e) {
                 console.log(e)
             }

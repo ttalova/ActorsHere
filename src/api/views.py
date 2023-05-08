@@ -84,6 +84,11 @@ class ActorsView(ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class TagsViewSet(mixins.ListModelMixin, GenericViewSet):
     pagination_class = None

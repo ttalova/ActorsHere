@@ -282,6 +282,7 @@
       </b-row>
 
       <b-button type="submit" variant="primary" @click.prevent="onSubmit">Сохранить</b-button>
+      <b-button v-if="this.form['id']" type="submit" variant="primary" @click.prevent="onDelete">Удалить анкету</b-button>
     </b-form>
   </div>
 </template>
@@ -318,7 +319,7 @@ export default {
         console.log(e)
       }
     },
-    ...mapActions(useActorsStore, ['createactor', 'getMyForm', 'updateformactor']),
+    ...mapActions(useActorsStore, ['createactor', 'getMyForm', 'updateformactor', 'deleteMyForm']),
     async onSubmit() {
       if (this.form['id']) {
         await this.updateformactor(this.form);
@@ -329,6 +330,14 @@ export default {
       }
       await nextTick(() =>this.$router.push({name: 'menu'}));
     },
+    async onDelete() {
+      try {
+        await this.deleteMyForm(this.form['id'])
+        await nextTick(() =>this.$router.push({name: 'menu'}));
+      } catch(e) {
+        console.log(e)
+      }
+    }
   },
   computed: {
     ...mapState(useAuthStore, ['user']),
