@@ -4,6 +4,7 @@
     <b-form @submit.prevent="onSubmit" action="post">
       <b-row>
         <b-col md="6">
+          <input type="hidden" name="hidden_field" v-model="form.id">
           <b-form-group
               label="ФИО:"
               label-for="input-1"
@@ -290,13 +291,14 @@ import {mapActions, mapState} from "pinia/dist/pinia";
 import {useAuthStore} from "../stores/auth";
 import {nextTick} from "vue";
 import {useActorsStore} from "../stores/actors";
-import {getCities, getTags} from "../services/api";
+import {getActorForm, getCities, getTags} from "../services/api";
 
 export default {
   name: "ActorFormComponent",
   data() {
     return {
-      form: {},
+      form: {
+      },
       tags: [],
       cities: []
     }
@@ -306,15 +308,26 @@ export default {
   },
   methods: {
     async load() {
-      this.tags = await getTags();
-      this.cities = await getCities()
+      try {
+        if (this.user.type_of_profile === 'actor') {
+          this.form = await this.getMyForm(this.user.id)
+        }
+        this.tags = await getTags();
+        this.cities = await getCities()
+      } catch(e) {
+        console.log(e)
+      }
     },
-    ...mapActions(useActorsStore, ['createactor']),
+    ...mapActions(useActorsStore, ['createactor', 'getMyForm', 'updateformactor']),
     async onSubmit() {
-      this.form['user'] = this.user.id
-      // this.form['main_photo'] = this.form['main_photo'].name
+      if (this.form['id']) {
+        await this.updateformactor(this.form);
+      } else {
+        this.form['user'] = this.user.id
+        // this.form['main_photo'] = this.form['main_photo'].name
         await this.createactor(this.form);
-      await nextTick(() =>this.$router.push({name: 'actors'}));
+      }
+      await nextTick(() =>this.$router.push({name: 'menu'}));
     },
   },
   computed: {

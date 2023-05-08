@@ -50,6 +50,11 @@ export async function getActors(params) {
     return response.data;
 }
 
+export async function getActorForm(user_id) {
+     const response = await instance.get(`/api/actors/${user_id}/get_form_by_user_id/`);
+    return response.data;
+}
+
 export async function getTags() {
      const response = await instance.get("/api/tags/", );
     return response.data;
@@ -71,6 +76,17 @@ export async function actorform(params) {
     }
     return response.data;
 }
+export async function updateactorform(params) {
+    const response = await instance.put(`/api/actors/${params.id}/`, params);
+    if (response.status === 500) {
+        throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
+    }
+    // python: response.status in (400, 401)
+    if ([400, 401].includes(response.status)) {
+        throw new Error(response.data.detail);
+    }
+    return response.data;
+}
 
 export async function getAccess(params) {
      const response = await instance.post('/auth/jwt/refresh/', params);
@@ -83,3 +99,9 @@ export async function getAccess(params) {
     }
     return response.data.access;
 }
+
+// export async function getClientId() {
+//      const response = await instance.get("/api/clientid/", );
+//      console.log(11111111, response.data[0]['client_id'])
+//      return response.data[0]['client_id'];
+// }

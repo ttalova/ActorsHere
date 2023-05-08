@@ -2,39 +2,31 @@ import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
 import {getProfile, login as api_login, getAccess as api_getAccess} from "../services/api";
-import {clearToken, getToken, storeAccess, storeRefresh} from "../services/LocalData";
+import {clearToken, getToken, getUser, setUser, storeAccess, storeRefresh} from "../services/LocalData";
 
 
 export const useAuthStore = defineStore('auth', {
     state: () => {
         return {
-            // token: getToken(),
             access: null,
             refresh: null,
             isLoading: false,
             error: null,
-            user: null
+            user: getUser()
         }
     },
     getters: {
         isAuth() {
-            // return this.user !== null
-            return getToken('access') !== null;
+            return this.user !== null
         },
         isStaff() {
-            if (this.user) {
                 return this.user.role === 'staff';
-            }
         },
         isActor() {
-            if (this.user) {
                 return this.user.type_of_profile === 'actor';
-            }
         },
         isEmployer() {
-            if (this.user) {
                 return this.user.type_of_profile === 'employer';
-            }
         },
     },
     actions: {
@@ -83,6 +75,7 @@ export const useAuthStore = defineStore('auth', {
             this.isLoading = true;
             try {
                 this.user = await getProfile();
+                setUser(JSON.stringify(this.user))
             } catch (e) {
                 console.log(e.message);
             }
@@ -97,6 +90,7 @@ export const useAuthStore = defineStore('auth', {
             this.refresh = null
             clearToken('access');
             clearToken('refresh');
+            clearToken('user');
         }
     }
 })

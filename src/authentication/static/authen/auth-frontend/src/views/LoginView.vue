@@ -26,14 +26,15 @@
             required
         ></b-form-input>
       </b-form-group>
-
-
+<!--<b-button @click="handlerSignInGoogle" :disabled="!Vue3GoogleOauth.isInit || Vue3GoogleOauth.isAuthorized">Войти-->
+<!--        через Google-->
+<!--      </b-button>-->
       <b-button type="submit" variant="primary">Войти</b-button>
     </b-form>
   </div>
 </template>
 <script>
-
+import {inject} from 'vue';
 import {useAuthStore} from "../stores/auth";
 import {mapActions, mapState} from "pinia/dist/pinia";
 import {nextTick} from "vue";
@@ -41,6 +42,12 @@ import {nextTick} from "vue";
 
 export default {
   name: "Login",
+  // setup() {
+  //   const Vue3GoogleOauth = inject('Vue3GoogleOauth');
+  //   return {
+  //     Vue3GoogleOauth
+  //   }
+  // },
   data() {
     return {
       form: {
@@ -53,8 +60,21 @@ export default {
     ...mapActions(useAuthStore, ['login', 'setAccess', 'setRefresh']),
     async onSubmit() {
       await this.login(this.form.email, this.form.password);
-      await nextTick(() =>this.$router.push({name: 'profile'}));
-    }
+      await nextTick(() => this.$router.push({name: 'profile'}));
+    },
+    // async handlerSignInGoogle() {
+    //   try {
+    //     const googleUser = await this.$gAuth.signIn();
+    //     if (!googleUser) {
+    //       return null;
+    //     } else {
+    //       // this.email = googleUser.getBasicProfile().getEmail();
+    //     }
+    //   } catch(error) {
+    //     console.log(error);
+    //     return null
+    //   }
+    // }
   },
   computed: {
     ...mapState(useAuthStore, ['error', 'isLoading']),

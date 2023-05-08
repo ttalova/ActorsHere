@@ -1,3 +1,4 @@
+from allauth.socialaccount.models import SocialApp
 from django.contrib.auth.hashers import make_password
 from djoser.serializers import UserSerializer
 from rest_framework import serializers
@@ -53,6 +54,12 @@ class ActorsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return ActorProfile.objects.create(**validated_data)
 
+    def update(self, instance, validated_data):
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+        return instance
+
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -64,3 +71,12 @@ class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
         fields = ("id", "name")
+
+
+class ClientIdSerializer(serializers.ModelSerializer):
+    client_id = serializers.CharField()
+    provider = serializers.CharField()
+
+    class Meta:
+        model = SocialApp
+        fields = ("client_id", "provider")

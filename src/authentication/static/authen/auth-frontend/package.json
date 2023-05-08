@@ -19,7 +19,9 @@
     "pinia": "^2.0.32",
     "primevue": "^3.27.0",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-google-signin-button": "^1.0.4",
+    "vue-router": "^4.1.6",
+    "vue3-google-oauth2": "^1.0.7"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",

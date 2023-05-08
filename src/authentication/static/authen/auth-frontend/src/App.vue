@@ -1,6 +1,7 @@
 <script setup>
 import {RouterView} from 'vue-router';
 import MainHeader from "./components/MainHeader.vue";
+
 </script>
 
 <template>
@@ -41,7 +42,7 @@ export default {
     if (this.refresh) {
       this.getAccess(this.refresh)
     }
-}, 50000)
+}, 100000)
   },
 
 }

@@ -1,7 +1,7 @@
 import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
-import {actorform, getActors} from "../services/api";
+import {actorform, getActorForm, getActors, updateactorform} from "../services/api";
 
 
 export const useActorsStore = defineStore('actors', {
@@ -18,6 +18,23 @@ export const useActorsStore = defineStore('actors', {
         }
     },
     actions: {
+        async updateformactor(form) {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const response = await updateactorform(form);
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
+        },
+        async getMyForm(user_id) {
+            try {
+                return await getActorForm(user_id)
+            } catch(e) {
+                console.log(e)
+            }
+        },
         async createactor(form) {
             this.isLoading = true;
             this.error = null;
@@ -48,6 +65,6 @@ export const useActorsStore = defineStore('actors', {
         },
         setParameters(params) {
             this.params = params;
-        }
+        },
     }
 })

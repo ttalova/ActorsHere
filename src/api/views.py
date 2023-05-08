@@ -1,12 +1,10 @@
-import time
-
-from django.contrib.auth import authenticate
+from allauth.socialaccount.models import SocialApp
 from django_filters.rest_framework import DjangoFilterBackend
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.decorators import api_view, action
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -19,14 +17,13 @@ from api.serializers import (
     ActorsSerializer,
     TagSerializer,
     CitySerializer,
+    ClientIdSerializer,
 )
-from authentication.models import User
 
-from api.serializers import StatusSerializer, LoginSerializer
+from api.serializers import StatusSerializer
 from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
 
-from core_app.models import ActorProfile, Tag, EmployerProfile, City
+from core_app.models import ActorProfile, Tag, City
 
 
 class RegistrUserView(APIView):
@@ -66,10 +63,25 @@ class ActorsView(ModelViewSet):
     queryset = ActorProfile.objects.all()
 
     def create(self, request, *args, **kwargs):
+        print("create")
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=["GET"], url_path="get_form_by_user_id")
+    def get_actor_by_user_id(self, request, *args, **kwargs):
+        user_id = kwargs.get("pk")
+        actor = get_object_or_404(self.queryset, user_id=user_id)
+        serializer = self.serializer_class(actor)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -89,3 +101,12 @@ class CityViewSet(mixins.ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return City.objects.all()
+
+
+class ClientSet(mixins.ListModelMixin, GenericViewSet):
+    pagination_class = None
+    serializer_class = ClientIdSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        return SocialApp.objects.all()
