@@ -18,12 +18,13 @@ from api.serializers import (
     TagSerializer,
     CitySerializer,
     ClientIdSerializer,
+    EmployersSerializer,
 )
 
 from api.serializers import StatusSerializer
 from rest_framework.views import APIView
 
-from core_app.models import ActorProfile, Tag, City
+from core_app.models import ActorProfile, Tag, City, EmployerProfile
 
 
 class RegistrUserView(APIView):
@@ -63,7 +64,6 @@ class ActorsView(ModelViewSet):
     queryset = ActorProfile.objects.all()
 
     def create(self, request, *args, **kwargs):
-        print("create")
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -115,3 +115,38 @@ class ClientSet(mixins.ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return SocialApp.objects.all()
+
+
+class EmployersView(ModelViewSet):
+    filter_backends = (DjangoFilterBackend,)
+    # filterset_class = ActorsFilter
+    permission_classes = (AllowAny,)
+    serializer_class = EmployersSerializer
+    queryset = EmployerProfile.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=["GET"], url_path="get_form_by_user_id")
+    def get_actor_by_user_id(self, request, *args, **kwargs):
+        user_id = kwargs.get("pk")
+        actor = get_object_or_404(self.queryset, user_id=user_id)
+        serializer = self.serializer_class(actor)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

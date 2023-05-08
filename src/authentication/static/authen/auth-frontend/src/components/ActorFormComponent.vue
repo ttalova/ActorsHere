@@ -1,7 +1,8 @@
 <template>
   <div>
+    <b-alert variant="danger" show v-if="error">{{ error }}</b-alert>
     <h1>Заполните анкету актера!</h1>
-    <b-form @submit.prevent="onSubmit" action="post">
+    <b-form @submit.prevent="onSubmit">
       <b-row>
         <b-col md="6">
           <input type="hidden" name="hidden_field" v-model="form.id">
@@ -321,15 +322,19 @@ export default {
     },
     ...mapActions(useActorsStore, ['createactor', 'getMyForm', 'updateformactor', 'deleteMyForm']),
     async onSubmit() {
-      if (this.form['id']) {
-        await this.updateformactor(this.form);
-      } else {
-        this.form['user'] = this.user.id
-        // this.form['main_photo'] = this.form['main_photo'].name
-        await this.createactor(this.form);
+      try {
+        if (this.form['id']) {
+          await this.updateformactor(this.form);
+        } else {
+          this.form['user'] = this.user.id
+          // this.form['main_photo'] = this.form['main_photo'].name
+          await this.createactor(this.form);
+        }
+        await nextTick(() => this.$router.push({name: 'menu'}));
+      } catch(e) {
+        this.error = e.message
       }
-      await nextTick(() =>this.$router.push({name: 'menu'}));
-    },
+      },
     async onDelete() {
       try {
         await this.deleteMyForm(this.form['id'])

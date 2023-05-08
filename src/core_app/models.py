@@ -51,7 +51,7 @@ class EmployerProfile(models.Model):
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=255)
-    photo = models.ImageField()
+    photo = models.ImageField(blank=True, null=True)
     company_specialization = models.CharField(choices=SPECIALIZATION)
     description = models.CharField()
     approximate_location = models.CharField()
@@ -60,7 +60,7 @@ class EmployerProfile(models.Model):
     webside = models.URLField(blank=True)
     email = models.EmailField()
     social_network = models.CharField(blank=True, null=True)
-    rating = models.PositiveIntegerField()
+    rating = models.PositiveIntegerField(default=5)
     city = models.ForeignKey(City, on_delete=models.RESTRICT)
 
 
