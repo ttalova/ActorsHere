@@ -3,7 +3,7 @@ import {ref} from 'vue'
 import {defineStore} from 'pinia'
 import {actorform, deleteactorform, getActorForm, getActors, updateactorform} from "../services/api";
 import {deleteemployerform, employerform, getEmployerForm, updateemployerform} from "../services/employer_api";
-import {createCastingForm} from "../services/castings_api";
+import {createCastingForm, getCasting} from "../services/castings_api";
 
 
 export const useCastingsStore = defineStore('castings', {
@@ -15,7 +15,7 @@ export const useCastingsStore = defineStore('castings', {
             params: {
                 search: null,
             },
-            form: {}
+            form: {},
         }
     },
     actions: {
@@ -29,12 +29,15 @@ export const useCastingsStore = defineStore('castings', {
             }
             this.isLoading = false;
         },
-        async getCasting(user_id) {
+        async getCastings(user_id) {
+            this.isLoading = true;
+            this.error = null;
             try {
-                return await getEmployerForm(user_id)
-            } catch(e) {
-                console.log(e)
+                return await getCasting(user_id);
+            } catch (e) {
+                this.error = e.message
             }
+            this.isLoading = false;
         },
         async deleteCasting(form_id) {
             try {

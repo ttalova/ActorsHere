@@ -61,7 +61,7 @@ const router = createRouter({
         {
             path: '/mycastings',
             name: 'mycastings',
-            component: () => import('../components/MyCastingsForActorView.vue'),
+            component: () => import('../components/MyCastingsForEmployerView.vue'),
         },
         {
             path: '/moderation',

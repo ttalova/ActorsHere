@@ -15,9 +15,9 @@ instance.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-export async function getCastingForm(user_id) {
-     const response = await instance.get(`/api/employers/${user_id}/get_form_by_user_id/`);
-    return response.data;
+export async function getCasting(user_id) {
+     const response = await instance.get(`/api/castings/${user_id}/get_users_castings/`);
+     return response.data;
 }
 
 export async function createCastingForm(params) {

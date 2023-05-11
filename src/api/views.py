@@ -170,19 +170,18 @@ class CastingsView(ModelViewSet):
     queryset = Casting.objects.all()
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # @action(detail=True, methods=["GET"], url_path="get_form_by_user_id")
-    # def get_actor_by_user_id(self, request, *args, **kwargs):
-    #     user_id = kwargs.get("pk")
-    #     actor = get_object_or_404(self.queryset, user_id=user_id)
-    #     serializer = self.serializer_class(actor)
-    #     return Response(serializer.data)
+    @action(detail=True, methods=["GET"], url_path="get_users_castings")
+    def get_users_castings(self, request, *args, **kwargs):
+        user_id = kwargs.get("pk")
+        casting = self.queryset.filter(casting_owner_id=user_id)
+        serializer = self.serializer_class(casting, many=True)
+        return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
