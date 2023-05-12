@@ -1,9 +1,13 @@
 import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
-import {actorform, deleteactorform, getActorForm, getActors, updateactorform} from "../services/api";
-import {deleteemployerform, employerform, getEmployerForm, updateemployerform} from "../services/employer_api";
-import {createCastingForm, getCasting} from "../services/castings_api";
+import {
+    createCastingForm, deleteCastingForm,
+    getCasting,
+    getCastingbyId,
+    getListOfCastings,
+    updateCastingForm
+} from "../services/castings_api";
 
 
 export const useCastingsStore = defineStore('castings', {
@@ -23,7 +27,7 @@ export const useCastingsStore = defineStore('castings', {
             this.isLoading = true;
             this.error = null;
             try {
-                const response = await updateemployerform(form);
+                const response = await updateCastingForm(form);
             } catch (e) {
                 this.error = e.message
             }
@@ -41,10 +45,25 @@ export const useCastingsStore = defineStore('castings', {
         },
         async deleteCasting(form_id) {
             try {
-                return await deleteemployerform(form_id)
+                return await deleteCastingForm(form_id)
             } catch(e) {
                 console.log(e)
             }
+        },
+        async getListOfCastings() {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const params = {
+                    ...this.params,
+                    full_name: this.params.search
+                }
+                const responseData = await getListOfCastings(params);
+                this.results = responseData.results;
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
         },
         async createCasting(form) {
             this.isLoading = true;
@@ -56,21 +75,16 @@ export const useCastingsStore = defineStore('castings', {
             }
             this.isLoading = false;
         },
-        // async load() {
-        //     this.isLoading = true;
-        //     this.error = null;
-        //     try {
-        //         const params = {
-        //             ...this.params,
-        //             full_name: this.params.search
-        //         }
-        //         const responseData = await getActors(params);
-        //         this.results = responseData.results;
-        //     } catch (e) {
-        //         this.error = e.message
-        //     }
-        //     this.isLoading = false;
-        // },
+        async load(id) {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                return await getCastingbyId(id);
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
+        },
         setParameter(key, value) {
             this.params[key] = value;
         },

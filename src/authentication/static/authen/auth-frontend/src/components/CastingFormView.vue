@@ -208,13 +208,23 @@ export default {
 
     }
   },
+  props: {
+    id: {
+      type: String,
+      required: false
+    }
+  },
   created() {
-    this.load();
+    this.loadthis();
   },
   methods: {
-    async load() {
+    async loadthis() {
       try {
-        // this.form = await this.getMyFormEmployer(this.user.id)
+          console.log(this.id)
+        if (this.id) {
+          this.form = await this.load(this.id)
+          console.log(this.form)
+        }
         this.cities = await getCities()
         this.tags = await getTags()
         this.types_of_project = await getProjectTypes()
@@ -222,7 +232,7 @@ export default {
         console.log(e)
       }
     },
-    ...mapActions(useCastingsStore, ['createCasting', 'getCasting', 'updateCasting', 'deleteCasting']),
+    ...mapActions(useCastingsStore, ['createCasting', 'getCasting', 'updateCasting', 'deleteCasting', 'load']),
     async onSubmit() {
       try {
         if (this.form['id']) {

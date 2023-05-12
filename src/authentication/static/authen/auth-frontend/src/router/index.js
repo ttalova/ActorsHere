@@ -28,6 +28,13 @@ const router = createRouter({
             component: () => import('../views/MainView.vue'),
             meta: {unauthorizedAccess: true}
         },
+        {
+            path: '/castingcard/:id',
+            name: 'castingcard',
+            component: () => import('../containers/CastingContainer.vue'),
+            meta: {unauthorizedAccess: true},
+            props: true,
+        },
          {
             path: '/actorform',
             name: 'actorForm',
@@ -39,8 +46,15 @@ const router = createRouter({
             component: () => import('../components/EmployerFormComponent.vue'),
         },
         {
-            path: '/castingform',
+            path: '/castingform/',
             name: 'castingform',
+             props: true,
+            component: () => import('../components/CastingFormView.vue'),
+        },
+        {
+            path: '/castingform/:id',
+            name: 'castingformbyid',
+             props: true,
             component: () => import('../components/CastingFormView.vue'),
         },
         {

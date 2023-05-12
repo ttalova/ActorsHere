@@ -11,12 +11,27 @@
 </div>
   <b-spinner v-if="isLoading"/>
   <b-alert v-if="error" variant="danger" show>{{error}}</b-alert>
-  <b-list-group>
     <b-list-group-item v-for="casting in this.results" :key="casting.id">
-  <h1>{{casting.header}}</h1>
-      <h2>casting.fee</h2>
+  <div>
+  <b-card
+    img-src="https://picsum.photos/600/300/?image=25"
+    img-alt="Image"
+    img-top
+    tag="article"
+    style="max-width: 20rem;"
+    class="mb-2"
+  >
+    <b-card-title>
+      {{casting.header}}
+    </b-card-title>
+    <b-card-text>
+      <h2>{{ casting.fee }}</h2>
+    </b-card-text>
+
+    <b-button :to="{ name: 'castingcard', params: { id: casting.id }}" variant="primary">Просмотр</b-button>
+  </b-card>
+</div>
     </b-list-group-item>
-  </b-list-group>
 </template>
 
 <script>

@@ -20,6 +20,16 @@ export async function getCasting(user_id) {
      return response.data;
 }
 
+export async function getListOfCastings() {
+     const response = await instance.get(`/api/castings/`);
+     return response.data;
+}
+
+export async function getCastingbyId(id) {
+     const response = await instance.get(`/api/castings/${id}/`);
+     return response.data;
+}
+
 export async function createCastingForm(params) {
     const response = await instance.post('/api/castings/', params);
     if (response.status === 500) {
@@ -33,7 +43,7 @@ export async function createCastingForm(params) {
 }
 
 export async function updateCastingForm(params) {
-    const response = await instance.put(`/api/employers/${params.id}/`, params);
+    const response = await instance.put(`/api/castings/${params.id}/`, params);
     if (response.status === 500) {
         throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
     }
@@ -45,7 +55,7 @@ export async function updateCastingForm(params) {
 }
 
 export async function deleteCastingForm(form_id) {
-    const response = await instance.delete(`/api/employers/${form_id}/`);
+    const response = await instance.delete(`/api/castings/${form_id}/`);
     if (response.status === 500) {
         throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
     }
