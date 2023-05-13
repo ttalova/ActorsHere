@@ -1,3 +1,5 @@
+import uuid
+
 from allauth.socialaccount.models import SocialApp
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -10,6 +12,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
+from api.email_function import send_forget_password_mail
 from api.filters import ActorsFilter
 from api.serializers import (
     UserRegistrSerializer,
@@ -21,12 +24,14 @@ from api.serializers import (
     EmployersSerializer,
     ProjectTypeSerializer,
     CastingsSerializer,
+    ChangePasswordSerializer,
 )
 
 from api.serializers import StatusSerializer
 from rest_framework.views import APIView
 
-from core_app.models import ActorProfile, Tag, City, EmployerProfile, ProjectType, Casting
+from authentication.models import User
+from core_app.models import ActorProfile, Tag, City, EmployerProfile, ProjectType, Casting, Profile
 
 
 class RegistrUserView(APIView):
@@ -194,3 +199,72 @@ class CastingsView(ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# def ForgetPassword(request):
+#     try:
+#         if request.method == 'POST':
+#             email = request.POST.get('email')
+#             if not User.objects.filter(email=email).first():
+#                 return Response(status=status.HTTP_404_NOT_FOUND)
+#
+#             user_obj = User.obgects.get(email=email)
+#             token = str(uuid.uuid4())
+#             send_forget_password_mail(user_obj, token)
+#             return Response(status=status.HTTP_200_OK)
+#     except Exception as e:
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# def ChangePassword(request, token):
+#     context = {}
+#     try:
+#         profile_obj = Profile.objects.get(send_forget_password = token)
+#         print(profile_obj)
+#         return Response(status=status.HTTP_200_OK)
+#     except Exception as e:
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
+#
+
+
+class ProfileViewSet(APIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ChangePasswordSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            email = request.data.get("email")
+            if not User.objects.filter(email=email).first():
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            user_obj = User.objects.get(email=email)
+            token = str(uuid.uuid4())
+            profile_obj, _ = Profile.objects.get_or_create(user=user_obj)
+            profile_obj.forget_password_token = token
+            profile_obj.save()
+            send_forget_password_mail(user_obj, token)
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class UpdatePasswordViewSet(APIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ChangePasswordSerializer
+
+    def post(self, request, token=None):
+        try:
+            profile_obj = Profile.objects.get(forget_password_token=token)
+            new_password = request.data.get("password_first")
+            new_password_second = request.data.get("password_second")
+            if new_password != new_password_second:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            user_id = profile_obj.user_id
+            user_obj = User.objects.get(id=user_id)
+            user_obj.set_password(new_password)
+            user_obj.save()
+            context = {"user_id": profile_obj.user.id}
+            return Response(context, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -1,7 +1,13 @@
 import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
-import {getProfile, login as api_login, getAccess as api_getAccess} from "../services/api";
+import {
+    getProfile,
+    login as api_login,
+    getAccess as api_getAccess,
+    forgetPassword,
+    changePassword as api_changePassword
+} from "../services/api";
 import {clearToken, getToken, getUser, setUser, storeAccess, storeRefresh} from "../services/LocalData";
 
 
@@ -12,7 +18,8 @@ export const useAuthStore = defineStore('auth', {
             refresh: null,
             isLoading: false,
             error: null,
-            user: getUser()
+            user: getUser(),
+            success: null
         }
     },
     getters: {
@@ -91,6 +98,28 @@ export const useAuthStore = defineStore('auth', {
             clearToken('access');
             clearToken('refresh');
             clearToken('user');
-        }
-    }
+        },
+         async forgetUserPassword(email) {
+            this.isLoading = true;
+            try {
+                const response = await forgetPassword(email)
+                this.success = 'Инструкции по восстановлению пароля отправлена вам на почту'
+                return response;
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
+        },
+        async changePassword(token, password_first, password_second) {
+            this.isLoading = true;
+            try {
+                const response = await api_changePassword(token, password_first, password_second)
+                this.success = 'Пароль успешно обновлен!'
+                return response;
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
+        },
+    },
 })

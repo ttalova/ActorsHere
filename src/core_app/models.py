@@ -192,3 +192,9 @@ class Favorites(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     casting = models.ForeignKey(Casting, on_delete=models.CASCADE, null=True)
     actor = models.ForeignKey(ActorProfile, on_delete=models.CASCADE, null=True)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    forget_password_token = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)

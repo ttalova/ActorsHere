@@ -26,6 +26,29 @@ export async function login(email, password) {
 
     return response.data;
 }
+export async function forgetPassword(email) {
+    const response = await instance.post('/api/forget-password', {email})
+    if (response.status === 500) {
+        throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
+    }
+    if ([400, 401].includes(response.status)) {
+        throw new Error('Некорректные учетные данные');
+    }
+    console.log(response)
+    return response.data;
+}
+
+export async function changePassword(token, password_first, password_second) {
+    const response = await instance.post(`/api/change-password/${token}/`, {password_first, password_second})
+    if (response.status === 500) {
+        throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
+    }
+    if ([400, 401].includes(response.status)) {
+        throw new Error('Некорректные учетные данные');
+    }
+    console.log(response)
+    return response.data;
+}
 
 export async function registration(email, password) {
     const response = await instance.post('/api/registr/', {email, password});
@@ -117,6 +140,7 @@ export async function deleteactorform(form_id) {
     }
     return response.data;
 }
+
 
 
 // export async function getClientId() {

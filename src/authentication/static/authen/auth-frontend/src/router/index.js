@@ -18,6 +18,19 @@ const router = createRouter({
             meta: {unauthorizedAccess: true}
         },
         {
+            path: '/forgetPassword',
+            name: 'forgetPassword',
+            component: () => import('../components/ChangePasswordView.vue'),
+            meta: {unauthorizedAccess: true}
+        },
+        {
+            path: '/changePassword/:token',
+            name: 'changePassword',
+            component: () => import('../components/UpdatePasswordView.vue'),
+            meta: {unauthorizedAccess: true},
+            props: true,
+        },
+        {
             path: '/profile',
             name: 'profile',
             component: () => import('../views/ProfileView.vue')

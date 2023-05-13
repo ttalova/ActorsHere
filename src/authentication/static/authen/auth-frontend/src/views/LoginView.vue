@@ -29,7 +29,8 @@
 <!--<b-button @click="handlerSignInGoogle" :disabled="!Vue3GoogleOauth.isInit || Vue3GoogleOauth.isAuthorized">Войти-->
 <!--        через Google-->
 <!--      </b-button>-->
-      <b-button type="submit" variant="primary">Войти</b-button>
+   <b-button type="submit" variant="primary">Войти</b-button>
+      <b-button type="submit" variant="primary" :to="{name: 'forgetPassword'}">Забыл пароль</b-button>
     </b-form>
   </div>
 </template>

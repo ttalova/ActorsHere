@@ -12,6 +12,8 @@ from api.views import (
     EmployersView,
     ProjectTypeViewSet,
     CastingsView,
+    ProfileViewSet,
+    UpdatePasswordViewSet,
 )
 
 router = SimpleRouter()
@@ -22,9 +24,12 @@ router.register("tags", TagsViewSet, basename="tags"),
 router.register("cities", CityViewSet, basename="cities"),
 router.register("projecttype", ProjectTypeViewSet, basename="projecttype"),
 router.register("clientid", ClientSet, basename="clientid"),
+# router.register("password", ProfileViewSet, basename="password"),
 
 urlpatterns = [
     path("registr/", RegistrUserView.as_view(), name="registr"),
     path("status/", status_view, name="status"),
     path("profile/", profile_view, name="profile"),
+    path("forget-password", ProfileViewSet.as_view()),
+    path("change-password/<str:token>/", UpdatePasswordViewSet.as_view()),
 ] + router.urls
