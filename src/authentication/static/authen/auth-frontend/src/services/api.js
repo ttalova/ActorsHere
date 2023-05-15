@@ -99,10 +99,13 @@ export async function getActors(params) {
      const response = await instance.get("/api/actors/", {params});
     return response.data;
 }
+export async function getActorById(id) {
+       const response = await instance.get(`/api/actors/${id}/`);
+     return response.data;
+}
 
 export async function getActorLike(actor) {
      const response = await instance.get(`/api/favorite-actor/${actor}/get_like_by_user_and_actor`);
-     console.log(response.data)
      return response.data;
 }
 export async function LikedActor(actor) {

@@ -341,9 +341,16 @@ class FavoritesActorViewSet(ModelViewSet):
     def get_like_by_user_and_actor(self, request, *args, **kwargs):
         user_id = self.request.user.id
         actor_id = kwargs.get("pk")
-        actor = get_object_or_404(self.queryset, user=user_id, actor=actor_id)
-        serializer = self.serializer_class(actor)
-        return Response(serializer.data)
+        try:
+            actor = self.queryset.get(user=user_id, actor=actor_id)
+        except self.queryset.model.DoesNotExist:
+            actor = None
+
+        if actor is not None:
+            serializer = self.serializer_class(actor)
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self):
         user_id = self.request.user.id

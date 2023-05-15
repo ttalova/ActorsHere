@@ -92,12 +92,7 @@ export const useCastingsStore = defineStore('castings', {
                 const responseData = await getCastingLike(casting);
                 this.like_info = responseData;
             } catch (e) {
-                console.log(e.response.status)
-                if (e.response.status === 404) {
-                    this.like_info = null;
-                } else {
                     this.error = e.message;
-                }
             }
         },
         async LikedCasting(casting) {

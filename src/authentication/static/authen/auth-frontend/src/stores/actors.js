@@ -9,8 +9,9 @@ import {
     getActors,
     LikedActor,
     DisLikedActor,
-    updateactorform
+    updateactorform, getActorById as getActorById_api
 } from "../services/api";
+import {getCastingbyId} from "../services/castings_api";
 
 
 export const useActorsStore = defineStore('actors', {
@@ -23,7 +24,8 @@ export const useActorsStore = defineStore('actors', {
                 search: null,
                 tag_id: null
             },
-            form: {}
+            form: {},
+            like_info: null
         }
     },
     actions: {
@@ -31,7 +33,7 @@ export const useActorsStore = defineStore('actors', {
             this.isLoading = true;
             this.error = null;
             try {
-                const response = await updateactorform(form);
+                await updateactorform(form);
             } catch (e) {
                 this.error = e.message
             }
@@ -55,7 +57,7 @@ export const useActorsStore = defineStore('actors', {
             this.isLoading = true;
             this.error = null;
             try {
-                const response = await actorform(form);
+                await actorform(form);
             } catch (e) {
                 this.error = e.message
             }
@@ -80,7 +82,7 @@ export const useActorsStore = defineStore('actors', {
             this.error = null;
             try {
                 const responseData = await getActorLike(actor);
-                this.results = responseData;
+                this.like_info = responseData;
             } catch (e) {
                 this.error = e.message
             }
@@ -106,6 +108,16 @@ export const useActorsStore = defineStore('actors', {
         },
         setParameters(params) {
             this.params = params;
+        },
+        async getActorById(id) {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                return await getActorById_api(id);
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
         },
     }
 })
