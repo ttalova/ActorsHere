@@ -100,6 +100,20 @@ export async function getActors(params) {
     return response.data;
 }
 
+export async function getActorLike(actor) {
+     const response = await instance.get(`/api/favorite-actor/${actor}/get_like_by_user_and_actor`);
+     console.log(response.data)
+     return response.data;
+}
+export async function LikedActor(actor) {
+     const response = await instance.post("/api/favorite-actor/", {actor});
+    return response.data;
+}
+export async function DisLikedActor(like) {
+     const response = await instance.delete(`/api/favorite-actor/${like}`);
+    return response.data;
+}
+
 export async function getActorForm(user_id) {
      const response = await instance.get(`/api/actors/${user_id}/get_form_by_user_id/`);
     return response.data;

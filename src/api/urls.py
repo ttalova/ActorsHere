@@ -14,6 +14,8 @@ from api.views import (
     CastingsView,
     ProfileViewSet,
     UpdatePasswordViewSet,
+    FavoritesCastingViewSet,
+    FavoritesActorViewSet,
 )
 
 router = SimpleRouter()
@@ -24,7 +26,8 @@ router.register("tags", TagsViewSet, basename="tags"),
 router.register("cities", CityViewSet, basename="cities"),
 router.register("projecttype", ProjectTypeViewSet, basename="projecttype"),
 router.register("clientid", ClientSet, basename="clientid"),
-# router.register("password", ProfileViewSet, basename="password"),
+router.register("favorite-casting", FavoritesCastingViewSet, basename="favorite-casting"),
+router.register("favorite-actor", FavoritesActorViewSet, basename="favorite-actor"),
 
 urlpatterns = [
     path("registr/", RegistrUserView.as_view(), name="registr"),

@@ -72,7 +72,7 @@ export const useAuthStore = defineStore('auth', {
                 storeRefresh(this.refresh);
                 this.setAccess(this.access)
                 this.setRefresh(this.refresh)
-                this.load();
+                await this.load();
             } catch (e) {
                 this.error = e.message
             }

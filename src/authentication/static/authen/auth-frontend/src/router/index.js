@@ -48,6 +48,13 @@ const router = createRouter({
             meta: {unauthorizedAccess: true},
             props: true,
         },
+        {
+            path: '/actorcard/:id',
+            name: 'actorcard',
+            component: () => import('../containers/ActorContainer.vue'),
+            meta: {unauthorizedAccess: true},
+            props: true,
+        },
          {
             path: '/actorform',
             name: 'actorForm',

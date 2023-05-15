@@ -7,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
 from rest_framework.decorators import api_view, action
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
@@ -25,13 +25,25 @@ from api.serializers import (
     ProjectTypeSerializer,
     CastingsSerializer,
     ChangePasswordSerializer,
+    FavoritesCastingSerializer,
+    FavoritesActorSerializer,
 )
 
 from api.serializers import StatusSerializer
 from rest_framework.views import APIView
 
 from authentication.models import User
-from core_app.models import ActorProfile, Tag, City, EmployerProfile, ProjectType, Casting, Profile
+from core_app.models import (
+    ActorProfile,
+    Tag,
+    City,
+    EmployerProfile,
+    ProjectType,
+    Casting,
+    Profile,
+    FavoritesCasting,
+    FavoritesActor,
+)
 
 
 class RegistrUserView(APIView):
@@ -268,3 +280,80 @@ class UpdatePasswordViewSet(APIView):
             return Response(context, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class FavoritesCastingViewSet(ModelViewSet):
+    queryset = FavoritesCasting.objects.all()
+    serializer_class = FavoritesCastingSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data["user"] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        casting_id = self.request.GET.get("casting")
+        queryset = super().get_queryset()
+        if user_id and casting_id:
+            queryset = queryset.filter(user=user_id, casting=casting_id)
+        return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=["GET"], url_path="get_like_by_user_and_casting")
+    def get_like_by_user_and_casting(self, request, *args, **kwargs):
+        user_id = self.request.user.id
+        casting_id = kwargs.get("pk")
+        try:
+            casting = self.queryset.get(user=user_id, casting=casting_id)
+        except self.queryset.model.DoesNotExist:
+            casting = None
+
+        if casting is not None:
+            serializer = self.serializer_class(casting)
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FavoritesActorViewSet(ModelViewSet):
+    queryset = FavoritesActor.objects.all()
+    serializer_class = FavoritesActorSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data["user"] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["GET"], url_path="get_like_by_user_and_actor")
+    def get_like_by_user_and_actor(self, request, *args, **kwargs):
+        user_id = self.request.user.id
+        actor_id = kwargs.get("pk")
+        actor = get_object_or_404(self.queryset, user=user_id, actor=actor_id)
+        serializer = self.serializer_class(actor)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        actor_id = self.request.GET.get("actor")
+        queryset = super().get_queryset()
+        if user_id and actor_id:
+            queryset = queryset.filter(user=user_id, actor=actor_id)
+        return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -15,11 +15,17 @@
 <script>
 import {mapActions, mapState} from "pinia/dist/pinia";
 import {useCastingsStore} from "../stores/castings";
+import LikeButtonComponent from "./LikeButtonComponent.vue";
+import {useAuthStore} from "../stores/auth";
 
 export default {
   name: "CastingsView",
-  methods: mapActions(useCastingsStore, ['getListOfCastings']),
-  computed: mapState(useCastingsStore, ['results', 'isLoading', 'error']),
+  components: {LikeButtonComponent},
+  methods: {...mapActions(useCastingsStore, ['getListOfCastings']),
+  },
+  computed: {...mapState(useCastingsStore, ['results', 'isLoading', 'error']),
+  ...mapState(useAuthStore, ['isAuth'])
+  },
   created() {
     this.getListOfCastings();
   }

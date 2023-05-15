@@ -2,10 +2,10 @@ import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
 import {
-    createCastingForm, deleteCastingForm,
+    createCastingForm, deleteCastingForm, DisLikedCasting as DisLikedCasting_api,
     getCasting,
-    getCastingbyId,
-    getListOfCastings,
+    getCastingbyId, getCastingLike,
+    getListOfCastings, LikedCasting as LikedCasting_api,
     updateCastingForm
 } from "../services/castings_api";
 
@@ -20,6 +20,7 @@ export const useCastingsStore = defineStore('castings', {
                 search: null,
             },
             form: {},
+            like_info: null
         }
     },
     actions: {
@@ -27,7 +28,7 @@ export const useCastingsStore = defineStore('castings', {
             this.isLoading = true;
             this.error = null;
             try {
-                const response = await updateCastingForm(form);
+                await updateCastingForm(form);
             } catch (e) {
                 this.error = e.message
             }
@@ -46,7 +47,7 @@ export const useCastingsStore = defineStore('castings', {
         async deleteCasting(form_id) {
             try {
                 return await deleteCastingForm(form_id)
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -69,7 +70,7 @@ export const useCastingsStore = defineStore('castings', {
             this.isLoading = true;
             this.error = null;
             try {
-                const response = await createCastingForm(form);
+                await createCastingForm(form);
             } catch (e) {
                 this.error = e.message
             }
@@ -84,6 +85,36 @@ export const useCastingsStore = defineStore('castings', {
                 this.error = e.message
             }
             this.isLoading = false;
+        },
+        async casting_be_liked(casting) {
+            this.error = null;
+            try {
+                const responseData = await getCastingLike(casting);
+                this.like_info = responseData;
+            } catch (e) {
+                console.log(e.response.status)
+                if (e.response.status === 404) {
+                    this.like_info = null;
+                } else {
+                    this.error = e.message;
+                }
+            }
+        },
+        async LikedCasting(casting) {
+            this.error = null;
+            try {
+                await LikedCasting_api(casting);
+            } catch (e) {
+                this.error = e.message
+            }
+        },
+        async DisLikedCasting(like) {
+            this.error = null;
+            try {
+                await DisLikedCasting_api(like);
+            } catch (e) {
+                this.error = e.message
+            }
         },
         setParameter(key, value) {
             this.params[key] = value;

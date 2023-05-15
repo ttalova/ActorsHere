@@ -188,10 +188,14 @@ class Response(models.Model):
     response_time = models.DateTimeField()
 
 
-class Favorites(models.Model):
+class FavoritesActor(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    actor = models.ForeignKey(ActorProfile, on_delete=models.CASCADE, null=True)
+
+
+class FavoritesCasting(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     casting = models.ForeignKey(Casting, on_delete=models.CASCADE, null=True)
-    actor = models.ForeignKey(ActorProfile, on_delete=models.CASCADE, null=True)
 
 
 class Profile(models.Model):

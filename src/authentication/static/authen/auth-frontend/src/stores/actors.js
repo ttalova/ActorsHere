@@ -1,7 +1,16 @@
 import {ref} from 'vue'
 
 import {defineStore} from 'pinia'
-import {actorform, deleteactorform, getActorForm, getActors, updateactorform} from "../services/api";
+import {
+    actorform,
+    deleteactorform,
+    getActorForm,
+    getActorLike,
+    getActors,
+    LikedActor,
+    DisLikedActor,
+    updateactorform
+} from "../services/api";
 
 
 export const useActorsStore = defineStore('actors', {
@@ -66,6 +75,31 @@ export const useActorsStore = defineStore('actors', {
                 this.error = e.message
             }
             this.isLoading = false;
+        },
+        async actor_be_liked(actor){
+            this.error = null;
+            try {
+                const responseData = await getActorLike(actor);
+                this.results = responseData;
+            } catch (e) {
+                this.error = e.message
+            }
+        },
+        async LikedActor(actor) {
+            this.error = null;
+            try {
+                await LikedActor(actor);
+            } catch (e) {
+                this.error = e.message
+            }
+        },
+        async DisLikedActor(like) {
+            this.error = null;
+            try {
+                await DisLikedActor(like);
+            } catch (e) {
+                this.error = e.message
+            }
         },
         setParameter(key, value) {
             this.params[key] = value;

@@ -65,3 +65,17 @@ export async function deleteCastingForm(form_id) {
     }
     return response.data;
 }
+
+export async function getCastingLike(casting) {
+     const response = await instance.get(`/api/favorite-casting/${casting}/get_like_by_user_and_casting`);
+     return response.data;
+}
+export async function LikedCasting(casting) {
+     const response = await instance.post("/api/favorite-casting/", {casting});
+    console.log(response.data)
+     return response.data;
+}
+export async function DisLikedCasting(like) {
+     const response = await instance.delete(`/api/favorite-casting/${like}`);
+    return response.data;
+}
