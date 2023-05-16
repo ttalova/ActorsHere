@@ -13,6 +13,7 @@ from core_app.models import (
     Profile,
     FavoritesCasting,
     FavoritesActor,
+    Response as ResponseTable,
 )
 
 
@@ -145,4 +146,10 @@ class FavoritesCastingSerializer(serializers.ModelSerializer):
 class FavoritesActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoritesActor
+        fields = "__all__"
+
+
+class ResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResponseTable
         fields = "__all__"

@@ -98,6 +98,11 @@ const router = createRouter({
             component: () => import('../components/MyCastingsForEmployerView.vue'),
         },
         {
+            path: '/myresponses',
+            name: 'myResponses',
+            component: () => import('../components/ActorsResponse.vue'),
+        },
+        {
             path: '/moderation',
             name: 'moderation',
             component: () => import('../components/ModerationView.vue'),

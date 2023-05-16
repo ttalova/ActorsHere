@@ -185,7 +185,7 @@ class Casting(models.Model):
 class Response(models.Model):
     casting = models.ForeignKey(Casting, on_delete=models.CASCADE)
     actor = models.ForeignKey(ActorProfile, on_delete=models.CASCADE)
-    response_time = models.DateTimeField()
+    response_time = models.DateTimeField(auto_now_add=True)
 
 
 class FavoritesActor(models.Model):

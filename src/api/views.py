@@ -27,6 +27,7 @@ from api.serializers import (
     ChangePasswordSerializer,
     FavoritesCastingSerializer,
     FavoritesActorSerializer,
+    ResponseSerializer,
 )
 
 from api.serializers import StatusSerializer
@@ -43,6 +44,7 @@ from core_app.models import (
     Profile,
     FavoritesCasting,
     FavoritesActor,
+    Response as ResponseTable,
 )
 
 
@@ -218,6 +220,15 @@ class CastingsView(ModelViewSet):
         serializer = self.serializer_class(castings, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=["GET"], url_path="get_response_actors_by_user_id")
+    def get_response_actors_by_user_id(self, request):
+        actor_id = ActorProfile.objects.get(user_id=request.user.id).id
+        favorites = ResponseTable.objects.filter(actor_id=actor_id)
+        casting_ids = favorites.values_list("casting_id", flat=True)
+        castings = Casting.objects.filter(id__in=casting_ids)
+        serializer = self.serializer_class(castings, many=True)
+        return Response(serializer.data)
+
     def update(self, request, *args, **kwargs):
         serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
         if serializer.is_valid():
@@ -381,3 +392,44 @@ class FavoritesActorViewSet(ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ResponseViewSet(ModelViewSet):
+    queryset = ResponseTable.objects.all()
+    serializer_class = ResponseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data["actor"] = ActorProfile.objects.get(user_id=request.user.id).id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        actor_id = ActorProfile.objects.get(user_id=self.request.user.id).id
+        queryset = super().get_queryset()
+        if actor_id:
+            queryset = queryset.filter(actor=actor_id)
+        return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=["GET"], url_path="get_response_by_actor")
+    def get_response_by_actor(self, request, *args, **kwargs):
+        actor_id = ActorProfile.objects.get(user_id=request.user.id).id
+        casting_id = kwargs.get("pk")
+        try:
+            response = self.queryset.get(actor=actor_id, casting=casting_id)
+        except self.queryset.model.DoesNotExist:
+            response = None
+
+        if response is not None:
+            serializer = self.serializer_class(response)
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_204_NO_CONTENT)

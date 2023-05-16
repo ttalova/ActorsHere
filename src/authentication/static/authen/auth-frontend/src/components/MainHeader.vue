@@ -30,6 +30,7 @@
           <b-dropdown-item v-if="isAuth" :to="{name: 'favorites'}">Избранное</b-dropdown-item>
           <b-dropdown-item v-if="isAuth" :to="{name: 'notifications'}">Уведомления</b-dropdown-item>
           <b-dropdown-item v-if="isAuth && isStaff" :to="{name: 'moderation'}">Модерация</b-dropdown-item>
+          <b-dropdown-item v-if="isAuth && isActor" :to="{name: 'myResponses'}">Мои отклики</b-dropdown-item>
           <b-dropdown-item v-if="isAuth && isEmployer" :to="{name: 'mycastings'}">Мои кастинги</b-dropdown-item>
           <b-dropdown-item v-if="isAuth && isEmployer" :to="{name: 'responsefromactors'}">Отклики</b-dropdown-item>
           <b-dropdown-item v-if="isAuth" :to="{name: 'settings'}">Настройки</b-dropdown-item>

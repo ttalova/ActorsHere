@@ -1,5 +1,5 @@
 <template>
-<h1 v-if="!favorites">Кастинги</h1>
+<h1>Мои отклики</h1>
   <b-spinner v-if="isLoading"/>
   <b-alert v-if="error" variant="danger" show>{{error}}</b-alert>
   <b-list-group>
@@ -15,29 +15,17 @@
 <script>
 import {mapActions, mapState} from "pinia/dist/pinia";
 import {useCastingsStore} from "../stores/castings";
-import LikeButtonComponent from "./LikeButtonComponent.vue";
 import {useAuthStore} from "../stores/auth";
 
 export default {
-  name: "CastingsView",
-  props: {
-    favorites: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
-  methods: {...mapActions(useCastingsStore, ['getListOfCastings', 'load_favorites']),
+  name: "ActorsResponse",
+  methods: {...mapActions(useCastingsStore, ['listOfUserResponse']),
   },
   computed: {...mapState(useCastingsStore, ['results', 'isLoading', 'error']),
   ...mapState(useAuthStore, ['isAuth'])
   },
   created() {
-    if (this.favorites) {
-      this.load_favorites();
-    } else {
-       this.getListOfCastings();
-    }
+       this.listOfUserResponse();
   }
 }
 </script>

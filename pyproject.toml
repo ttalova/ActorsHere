@@ -25,6 +25,7 @@ django-allauth = "^0.54.0"
 celery = "^5.2.7"
 redis = "^4.5.5"
 flower = "^1.2.0"
+gevent = "^22.10.2"
 
 
 [tool.poetry.group.dev.dependencies]

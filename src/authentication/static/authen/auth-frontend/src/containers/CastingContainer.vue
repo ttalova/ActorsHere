@@ -15,6 +15,9 @@
       <b-button v-if="this.canEdit===this.results.casting_owner" :to="{ name: 'castingformbyid', params: { id: this.results.id }}"
                 variant="primary">Редактировать
       </b-button>
+      <b-button v-if="this.isActor && this.isAuth" @click.prevent="responseHandler"
+                variant="primary"> {{responseStatus}}
+      </b-button>
       <LikeButtonComponent v-if="isAuth" @clickLike="clickLike" :like="this.like"/>
     </b-card>
   </div>
@@ -43,16 +46,22 @@ export default {
       error: null,
       canEdit: false,
       like: false,
-      like_id: null
+      like_id: null,
+      resp: null,
+      resp_id: null,
+      responseStatus: null
     }
   },
   created() {
     this.load(this.id)
     this.getEditMode()
     this.loading()
+    if (this.isActor) {
+      this.loadingResponse()
+    }
   },
   methods: {
-    ...mapActions(useCastingsStore, ['load', 'casting_be_liked', 'LikedCasting', 'DisLikedCasting']),
+    ...mapActions(useCastingsStore, ['load', 'casting_be_liked', 'LikedCasting', 'DisLikedCasting', 'ResponseToCasting', 'casting_in_response']),
     async load(id) {
       this.isLoading = true;
       this.error = null;
@@ -96,10 +105,38 @@ export default {
           this.like = false
         }
     },
+    async loadingResponse() {
+      this.response_info = await this.casting_in_response(this.id)
+      if (this.response_info) {
+        this.resp = true
+        this.resp_id = this.response_info.id
+        this.responseStatus = 'Отозвать отклик'
+      } else {
+        this.resp = false
+        this.responseStatus = 'Откликнуться'
+      }
+    },
+    async responseHandler() {
+      if (!this.resp) {
+        try {
+          this.response_info = await this.ResponseToCasting(this.id)
+          await this.loadingResponse()
+        } catch (e) {
+          this.error = e.message
+        }
+      } else {
+        try {
+          this.response_info = await this.DisResponseCasting(this.resp_id)
+          await this.loadingResponse()
+        } catch (e) {
+          this.error = e.message
+        }
+      }
+    }
   },
   computed: {
-    ...mapState(useCastingsStore, ['isLoading', 'error', 'results', 'like_info']),
-    ...mapState(useAuthStore, ['user', 'isAuth'])
+    ...mapState(useCastingsStore, ['isLoading', 'error', 'results', 'like_info', 'response_info', 'DisResponseCasting']),
+    ...mapState(useAuthStore, ['user', 'isAuth', 'isActor'])
   },
 }
 </script>

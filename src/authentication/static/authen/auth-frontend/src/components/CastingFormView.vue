@@ -220,10 +220,8 @@ export default {
   methods: {
     async loadthis() {
       try {
-          console.log(this.id)
         if (this.id) {
           this.form = await this.load(this.id)
-          console.log(this.form)
         }
         this.cities = await getCities()
         this.tags = await getTags()

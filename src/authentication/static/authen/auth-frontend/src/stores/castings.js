@@ -8,6 +8,7 @@ import {
     getListOfCastings, LikedCasting as LikedCasting_api,
     updateCastingForm
 } from "../services/castings_api";
+import {getCastingResponse, removeCastingResponse, setResponse, UserCastingResponse} from "../services/response";
 
 
 export const useCastingsStore = defineStore('castings', {
@@ -20,7 +21,8 @@ export const useCastingsStore = defineStore('castings', {
                 search: null,
             },
             form: {},
-            like_info: null
+            like_info: null,
+            response_info: null
         }
     },
     actions: {
@@ -124,6 +126,40 @@ export const useCastingsStore = defineStore('castings', {
                 await DisLikedCasting_api(like);
             } catch (e) {
                 this.error = e.message
+            }
+        },
+        async ResponseToCasting(casting) {
+            this.error = null;
+            try {
+                await setResponse(casting);
+            } catch (e) {
+                this.error = e.message
+            }
+        },
+        async casting_in_response(casting) {
+            this.error = null;
+            try {
+                const responseData = await getCastingResponse(casting);
+                this.response_info = responseData;
+            } catch (e) {
+                    this.error = e.message;
+            }
+        },
+          async DisResponseCasting(casting) {
+            this.error = null;
+            try {
+                await removeCastingResponse(casting);
+            } catch (e) {
+                this.error = e.message
+            }
+        },
+        async listOfUserResponse() {
+            this.error = null;
+            try {
+                const responseData = await UserCastingResponse();
+                this.results = responseData;
+            } catch (e) {
+                    this.error = e.message;
             }
         },
         setParameter(key, value) {
