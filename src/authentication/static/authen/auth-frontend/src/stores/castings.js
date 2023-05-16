@@ -4,7 +4,7 @@ import {defineStore} from 'pinia'
 import {
     createCastingForm, deleteCastingForm, DisLikedCasting as DisLikedCasting_api,
     getCasting,
-    getCastingbyId, getCastingLike,
+    getCastingbyId, getCastingLike, getFavoritesCastings,
     getListOfCastings, LikedCasting as LikedCasting_api,
     updateCastingForm
 } from "../services/castings_api";
@@ -61,6 +61,21 @@ export const useCastingsStore = defineStore('castings', {
                 }
                 const responseData = await getListOfCastings(params);
                 this.results = responseData.results;
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
+        },
+        async load_favorites() {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const params = {
+                    ...this.params,
+                    full_name: this.params.search
+                }
+                const responseData = await getFavoritesCastings();
+                this.results = responseData;
             } catch (e) {
                 this.error = e.message
             }

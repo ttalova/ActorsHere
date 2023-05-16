@@ -96,6 +96,15 @@ class ActorsView(ModelViewSet):
         serializer = self.serializer_class(actor)
         return Response(serializer.data)
 
+    @action(detail=False, methods=["GET"], url_path="get_favorite_actors_by_user_id")
+    def get_favorite_actors_by_user_id(self, request):
+        user_id = self.request.user.id
+        favorites = FavoritesActor.objects.filter(user_id=user_id)
+        actor_ids = favorites.values_list("actor_id", flat=True)
+        actors = ActorProfile.objects.filter(id__in=actor_ids)
+        serializer = self.serializer_class(actors, many=True)
+        return Response(serializer.data)
+
     def update(self, request, *args, **kwargs):
         serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
         if serializer.is_valid():
@@ -198,6 +207,15 @@ class CastingsView(ModelViewSet):
         user_id = kwargs.get("pk")
         casting = self.queryset.filter(casting_owner_id=user_id)
         serializer = self.serializer_class(casting, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["GET"], url_path="get_favorite_castings_by_user_id")
+    def get_favorite_castings_by_user_id(self, request):
+        user_id = self.request.user.id
+        favorites = FavoritesCasting.objects.filter(user_id=user_id)
+        casting_ids = favorites.values_list("casting_id", flat=True)
+        castings = Casting.objects.filter(id__in=casting_ids)
+        serializer = self.serializer_class(castings, many=True)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
@@ -354,10 +372,9 @@ class FavoritesActorViewSet(ModelViewSet):
 
     def get_queryset(self):
         user_id = self.request.user.id
-        actor_id = self.request.GET.get("actor")
         queryset = super().get_queryset()
-        if user_id and actor_id:
-            queryset = queryset.filter(user=user_id, actor=actor_id)
+        if user_id:
+            queryset = queryset.filter(user=user_id)
         return queryset
 
     def destroy(self, request, *args, **kwargs):

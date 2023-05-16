@@ -1,5 +1,5 @@
 <template>
-<h1>Castings</h1>
+<h1 v-if="!favorites">Castings</h1>
   <b-spinner v-if="isLoading"/>
   <b-alert v-if="error" variant="danger" show>{{error}}</b-alert>
   <b-list-group>
@@ -20,14 +20,25 @@ import {useAuthStore} from "../stores/auth";
 
 export default {
   name: "CastingsView",
+  props: {
+    favorites: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   components: {LikeButtonComponent},
-  methods: {...mapActions(useCastingsStore, ['getListOfCastings']),
+  methods: {...mapActions(useCastingsStore, ['getListOfCastings', 'load_favorites']),
   },
   computed: {...mapState(useCastingsStore, ['results', 'isLoading', 'error']),
   ...mapState(useAuthStore, ['isAuth'])
   },
   created() {
-    this.getListOfCastings();
+    if (this.favorites) {
+      this.load_favorites();
+    } else {
+       this.getListOfCastings();
+    }
   }
 }
 </script>

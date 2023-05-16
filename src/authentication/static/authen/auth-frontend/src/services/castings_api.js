@@ -24,6 +24,10 @@ export async function getListOfCastings() {
      const response = await instance.get(`/api/castings/`);
      return response.data;
 }
+export async function getFavoritesCastings() {
+     const response = await instance.get(`/api/castings/get_favorite_castings_by_user_id/`);
+     return response.data;
+}
 
 export async function getCastingbyId(id) {
      const response = await instance.get(`/api/castings/${id}/`);
@@ -72,7 +76,6 @@ export async function getCastingLike(casting) {
 }
 export async function LikedCasting(casting) {
      const response = await instance.post("/api/favorite-casting/", {casting});
-    console.log(response.data)
      return response.data;
 }
 export async function DisLikedCasting(like) {

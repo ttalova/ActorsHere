@@ -9,7 +9,7 @@ import {
     getActors,
     LikedActor,
     DisLikedActor,
-    updateactorform, getActorById as getActorById_api
+    updateactorform, getActorById as getActorById_api, getFavorites
 } from "../services/api";
 import {getCastingbyId} from "../services/castings_api";
 
@@ -114,6 +114,17 @@ export const useActorsStore = defineStore('actors', {
             this.error = null;
             try {
                 return await getActorById_api(id);
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
+        },
+        async load_favorites() {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const responseData = await getFavorites();
+                this.results = responseData;
             } catch (e) {
                 this.error = e.message
             }
