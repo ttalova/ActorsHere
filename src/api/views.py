@@ -119,6 +119,17 @@ class ActorsView(ModelViewSet):
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=True, methods=["GET"], url_path="get_list_of_actors_to_casting")
+    def get_list_of_actors_to_casting(self, request, *args, **kwargs):
+        casting_id = kwargs.get("pk")
+        if casting_id is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        queryset = ResponseTable.objects.filter(casting_id=casting_id)
+        actor_ids = queryset.values_list("actor_id", flat=True)
+        actors = ActorProfile.objects.filter(id__in=actor_ids)
+        serializer = self.serializer_class(actors, many=True)
+        return Response(serializer.data)
+
 
 class TagsViewSet(mixins.ListModelMixin, GenericViewSet):
     pagination_class = None
@@ -198,16 +209,18 @@ class CastingsView(ModelViewSet):
     queryset = Casting.objects.all()
 
     def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
+        data = request.data.copy()
+        data["casting_owner"] = EmployerProfile.objects.get(user_id=request.user.id).id
+        serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=["GET"], url_path="get_users_castings")
+    @action(detail=False, methods=["GET"], url_path="get_users_castings")
     def get_users_castings(self, request, *args, **kwargs):
-        user_id = kwargs.get("pk")
-        casting = self.queryset.filter(casting_owner_id=user_id)
+        employer_id = EmployerProfile.objects.get(user_id=request.user.id).id
+        casting = self.queryset.filter(casting_owner_id=employer_id)
         serializer = self.serializer_class(casting, many=True)
         return Response(serializer.data)
 
@@ -230,7 +243,9 @@ class CastingsView(ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
+        data = request.data.copy()
+        data["casting_owner"] = EmployerProfile.objects.get(user_id=request.user.id).id
+        serializer = self.serializer_class(instance=self.get_object(), data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -240,6 +255,14 @@ class CastingsView(ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        modified_data = serializer.data.copy()
+        casting_owner = modified_data["casting_owner"]
+        modified_data["casting_owner"] = EmployerProfile.objects.get(id=casting_owner).user_id
+        return Response(modified_data)
 
 
 # def ForgetPassword(request):

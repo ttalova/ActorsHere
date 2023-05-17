@@ -15,8 +15,8 @@ instance.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-export async function getCasting(user_id) {
-     const response = await instance.get(`/api/castings/${user_id}/get_users_castings/`);
+export async function getCasting() {
+     const response = await instance.get(`/api/castings/get_users_castings/`);
      return response.data;
 }
 

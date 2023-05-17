@@ -35,3 +35,8 @@ export async function UserCastingResponse() {
      const response = await instance.get(`/api/castings/get_response_actors_by_user_id`);
      return response.data;
 }
+
+export async function ListOfActorsResponseToCasting(casting) {
+     const response = await instance.get(`/api/actors/${casting}/get_list_of_actors_to_casting`);
+     return response.data;
+}

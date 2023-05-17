@@ -5,8 +5,8 @@
   <b-list-group>
     <b-list-group-item v-for="actor in results" :key="actor.id">
       <p>{{ actor.full_name }}</p>
-      <p>{{ actor.city }}</p>
-      <p>{{ actor.rating }}</p>
+      <p>{{ actor.education }}</p>
+      <p>{{ actor.skills }}</p>
     <b-button :to="{ name: 'actorcard', params: { id: actor.id }}" variant="primary">Просмотр</b-button>
     </b-list-group-item>
   </b-list-group>

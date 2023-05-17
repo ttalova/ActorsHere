@@ -160,7 +160,7 @@ class ActorProfile(models.Model):
 
 class Casting(models.Model):
     GENDER = [("not_choice", ""), ("male", "Мужской"), ("female", "Женский"), ("all", "Все")]
-    casting_owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    casting_owner = models.ForeignKey(EmployerProfile, on_delete=models.CASCADE)
     project_type = models.ForeignKey(ProjectType, on_delete=models.RESTRICT)
     city = models.ForeignKey(City, on_delete=models.RESTRICT)
     photo = models.ImageField(null=True, blank=True)

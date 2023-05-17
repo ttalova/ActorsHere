@@ -24,7 +24,7 @@
         <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
           <template #button-content>
-            <b-nav-item v-if="isAuth">Профиль</b-nav-item>
+            <em v-if="isAuth">Профиль</em>
           </template>
           <b-dropdown-item :to="{name: 'profile'}">Профиль</b-dropdown-item>
           <b-dropdown-item v-if="isAuth" :to="{name: 'favorites'}">Избранное</b-dropdown-item>

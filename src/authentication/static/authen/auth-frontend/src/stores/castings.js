@@ -8,7 +8,13 @@ import {
     getListOfCastings, LikedCasting as LikedCasting_api,
     updateCastingForm
 } from "../services/castings_api";
-import {getCastingResponse, removeCastingResponse, setResponse, UserCastingResponse} from "../services/response";
+import {
+    getCastingResponse,
+    ListOfActorsResponseToCasting,
+    removeCastingResponse,
+    setResponse,
+    UserCastingResponse
+} from "../services/response";
 
 
 export const useCastingsStore = defineStore('castings', {
@@ -36,11 +42,11 @@ export const useCastingsStore = defineStore('castings', {
             }
             this.isLoading = false;
         },
-        async getCastings(user_id) {
+        async getCastings() {
             this.isLoading = true;
             this.error = null;
             try {
-                return await getCasting(user_id);
+                return await getCasting();
             } catch (e) {
                 this.error = e.message
             }
@@ -157,6 +163,15 @@ export const useCastingsStore = defineStore('castings', {
             this.error = null;
             try {
                 const responseData = await UserCastingResponse();
+                this.results = responseData;
+            } catch (e) {
+                    this.error = e.message;
+            }
+        },
+        async listOfActorsResponse(casting) {
+            this.error = null;
+            try {
+                const responseData = await ListOfActorsResponseToCasting(casting);
                 this.results = responseData;
             } catch (e) {
                     this.error = e.message;
