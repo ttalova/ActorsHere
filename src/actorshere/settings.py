@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -219,3 +220,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
+CELERY_BEAT_SCHEDULE = {
+    "check-casting-end-dates": {
+        "task": "api.tasks.check_casting_end_dates",
+        "schedule": timedelta(
+            hours=24
+        ),  # Задайте интервал, с которым будет выполняться задача (например, каждые 24 часа)
+    },
+}
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"

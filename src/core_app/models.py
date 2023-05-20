@@ -190,15 +190,22 @@ class Response(models.Model):
 
 class FavoritesActor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    actor = models.ForeignKey(ActorProfile, on_delete=models.CASCADE, null=True)
+    actor = models.ForeignKey(ActorProfile, on_delete=models.CASCADE)
 
 
 class FavoritesCasting(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    casting = models.ForeignKey(Casting, on_delete=models.CASCADE, null=True)
+    casting = models.ForeignKey(Casting, on_delete=models.CASCADE)
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     forget_password_token = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Notification(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.CharField(max_length=1000)
+    is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
