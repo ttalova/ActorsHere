@@ -17,6 +17,8 @@ from api.views import (
     FavoritesCastingViewSet,
     FavoritesActorViewSet,
     ResponseViewSet,
+    NotificationViewSet,
+    UserSettingsViewSet,
 )
 
 router = SimpleRouter()
@@ -30,6 +32,8 @@ router.register("clientid", ClientSet, basename="clientid"),
 router.register("favorite-casting", FavoritesCastingViewSet, basename="favorite-casting"),
 router.register("favorite-actor", FavoritesActorViewSet, basename="favorite-actor"),
 router.register("response", ResponseViewSet, basename="response"),
+router.register("notifications", NotificationViewSet, basename="notifications"),
+router.register("settings", UserSettingsViewSet, basename="settings"),
 
 urlpatterns = [
     path("registr/", RegistrUserView.as_view(), name="registr"),

@@ -1,7 +1,10 @@
 import uuid
 
 from allauth.socialaccount.models import SocialApp
+from django.core.files.storage import default_storage
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import F
+from djoser.serializers import UserSerializer
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
@@ -28,6 +31,7 @@ from api.serializers import (
     FavoritesCastingSerializer,
     FavoritesActorSerializer,
     ResponseSerializer,
+    NotificationSerializer,
 )
 
 from api.serializers import StatusSerializer
@@ -45,6 +49,7 @@ from core_app.models import (
     FavoritesCasting,
     FavoritesActor,
     Response as ResponseTable,
+    Notification,
 )
 
 
@@ -243,9 +248,12 @@ class CastingsView(ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
+        instance = self.get_object()
         data = request.data.copy()
         data["casting_owner"] = EmployerProfile.objects.get(user_id=request.user.id).id
-        serializer = self.serializer_class(instance=self.get_object(), data=data, partial=True)
+        if data["photo"] == "null":
+            data.pop("photo")
+        serializer = self.serializer_class(instance=instance, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -456,3 +464,37 @@ class ResponseViewSet(ModelViewSet):
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class NotificationViewSet(ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        queryset = super().get_queryset()
+        if user_id:
+            queryset = queryset.filter(owner=user_id)
+        return queryset.order_by(F("created_at").desc())
+
+
+class UserSettingsViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        current_email = request.data.get("current_email")
+        new_email = request.data.get("new_email")
+        password = request.data.get("password")
+
+        # Проверка соответствия текущей почты и пароля
+        if instance.email == current_email and instance.check_password(password):
+            instance.email = new_email
+            instance.save()
+            return Response(status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)

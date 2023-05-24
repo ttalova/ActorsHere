@@ -47,7 +47,7 @@ export async function createCastingForm(params) {
 }
 
 export async function updateCastingForm(params) {
-    const response = await instance.put(`/api/castings/${params.id}/`, params);
+    const response = await instance.put(`/api/castings/${params.get('id')}/`, params);
     if (response.status === 500) {
         throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
     }

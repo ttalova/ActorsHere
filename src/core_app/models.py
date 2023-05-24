@@ -51,7 +51,7 @@ class EmployerProfile(models.Model):
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=255)
-    photo = models.ImageField(blank=True, null=True)
+    photo = models.ImageField(blank=True, null=True, upload_to="images")
     company_specialization = models.CharField(choices=SPECIALIZATION)
     description = models.CharField()
     approximate_location = models.CharField()
@@ -123,7 +123,7 @@ class ActorProfile(models.Model):
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     full_name = models.CharField()
-    main_photo = models.ImageField(blank=True, null=True)
+    main_photo = models.ImageField(blank=True, null=True, upload_to="images")
     birthdate = models.DateField()
     # video_business_card = models.CharField()
     figure_parameters = models.CharField(blank=True, null=True)
@@ -163,7 +163,7 @@ class Casting(models.Model):
     casting_owner = models.ForeignKey(EmployerProfile, on_delete=models.CASCADE)
     project_type = models.ForeignKey(ProjectType, on_delete=models.RESTRICT)
     city = models.ForeignKey(City, on_delete=models.RESTRICT)
-    photo = models.ImageField(null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True, upload_to="images")
     header = models.CharField()
     fee = models.CharField()
     description = models.CharField()

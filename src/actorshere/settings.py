@@ -149,21 +149,6 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "authentication.User"
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": [
-#         "rest_framework.authentication.BasicAuthentication",
-#         "rest_framework.authentication.SessionAuthentication",
-#     ],
-# }
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-#     'PAGE_SIZE': 10,
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.BasicAuthentication',
-#         'rest_framework.authentication.SessionAuthentication',
-#         'rest_framework.authentication.TokenAuthentication',
-#     ]
-# }
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
@@ -174,11 +159,6 @@ REST_FRAMEWORK = {
     ],
     "PAGE_SIZE": 10,
 }
-# DJOSER = {
-#     "ACTIVATION_URL": "#/activate/{uid}/{token}",
-#     "SEND_ACTIVATION_EMAIL": False,
-# }
-#
 SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timedelta(minutes=5), "AUTH_HEADER_TYPES": ("JWT",)}
 
 SWAGGER_SETTINGS = {
@@ -187,7 +167,6 @@ SWAGGER_SETTINGS = {
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
-# CORS_ALLOW_HEADERS = ["aгthorization", "content-type"]
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
@@ -231,3 +210,7 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"

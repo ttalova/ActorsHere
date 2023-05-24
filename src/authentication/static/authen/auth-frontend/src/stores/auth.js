@@ -9,6 +9,8 @@ import {
     changePassword as api_changePassword
 } from "../services/api";
 import {clearToken, getToken, getUser, setUser, storeAccess, storeRefresh} from "../services/LocalData";
+import {getNotifications} from "../services/notifications_api";
+import {changeEmail as changeEmail_api} from "../services/user_api";
 
 
 export const useAuthStore = defineStore('auth', {
@@ -19,7 +21,8 @@ export const useAuthStore = defineStore('auth', {
             isLoading: false,
             error: null,
             user: getUser(),
-            success: null
+            success: null,
+            notifications: null
         }
     },
     getters: {
@@ -70,8 +73,8 @@ export const useAuthStore = defineStore('auth', {
                 this.refresh = data.refresh;
                 storeAccess(this.access);
                 storeRefresh(this.refresh);
-                this.setAccess(this.access)
-                this.setRefresh(this.refresh)
+                await this.setAccess(this.access)
+                await this.setRefresh(this.refresh)
                 await this.load();
             } catch (e) {
                 this.error = e.message
@@ -83,6 +86,18 @@ export const useAuthStore = defineStore('auth', {
             try {
                 this.user = await getProfile();
                 setUser(JSON.stringify(this.user))
+            } catch (e) {
+                console.log(e.message);
+            }
+            if (!this.user) {
+                this.logout()
+            }
+            this.isLoading = false;
+        },
+        async getNotes() {
+            this.isLoading = true;
+            try {
+                this.notifications = await getNotifications().results;
             } catch (e) {
                 console.log(e.message);
             }
@@ -103,7 +118,7 @@ export const useAuthStore = defineStore('auth', {
             this.isLoading = true;
             try {
                 const response = await forgetPassword(email)
-                this.success = 'Инструкции по восстановлению пароля отправлена вам на почту'
+                this.success = 'Инструкции по восстановлению пароля отправлены вам на почту'
                 return response;
             } catch (e) {
                 this.error = e.message
@@ -115,6 +130,17 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await api_changePassword(token, password_first, password_second)
                 this.success = 'Пароль успешно обновлен!'
+                return response;
+            } catch (e) {
+                this.error = e.message
+            }
+            this.isLoading = false;
+        },
+        async changeEmail(user_id, current_email, new_email, password) {
+            this.isLoading = true;
+            try {
+                const response = await changeEmail_api(user_id, current_email, new_email, password)
+                this.success = ' Email успешно обновлен!'
                 return response;
             } catch (e) {
                 this.error = e.message

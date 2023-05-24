@@ -51,6 +51,13 @@ export default {
     ...mapActions(useAuthStore, ['changePassword']),
     async onSubmit() {
       await this.changePassword(this.token, this.form.password_first, this.form.password_second);
+      if (this.success) {
+        if (this.user) {
+          await nextTick(() => this.$router.push({name: 'profile'}));
+        } else {
+          await nextTick(() => this.$router.push({name: 'login'}));
+        }
+      }
       },
     // async handlerSignInGoogle() {
     //   try {
@@ -67,7 +74,7 @@ export default {
     // }
   },
   computed: {
-    ...mapState(useAuthStore, ['error', 'isLoading', 'success']),
+    ...mapState(useAuthStore, ['user', 'error', 'isLoading', 'success']),
 
   }
 }

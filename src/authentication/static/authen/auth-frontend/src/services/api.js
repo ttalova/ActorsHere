@@ -34,7 +34,6 @@ export async function forgetPassword(email) {
     if ([400, 401].includes(response.status)) {
         throw new Error('Некорректные учетные данные');
     }
-    console.log(response)
     return response.data;
 }
 
@@ -46,7 +45,6 @@ export async function changePassword(token, password_first, password_second) {
     if ([400, 401].includes(response.status)) {
         throw new Error('Некорректные учетные данные');
     }
-    console.log(response)
     return response.data;
 }
 

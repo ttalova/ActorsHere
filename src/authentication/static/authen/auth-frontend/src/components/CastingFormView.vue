@@ -2,7 +2,7 @@
   <div>
     <b-alert variant="danger" show v-if="error">{{ error }}</b-alert>
     <h1>Создайте кастинг!</h1>
-    <b-form @submit.prevent="onSubmit">
+    <b-form @submit.prevent="onSubmit" enctype="multipart/form-data">
       <b-row>
         <b-col md="6">
           <input type="hidden" name="hidden_field" v-model="form.id">
@@ -20,8 +20,9 @@
           <b-form-group
               label="Фотография:">
             <b-form-file
+                name="photo"
                 v-model="form.photo"
-                :state="Boolean(file1)"
+                :state="Boolean(form.photo)"
                 placeholder="Выберите файл или перенесите его сюда..."
                 drop-placeholder="Drop file here..."
             ></b-form-file>
@@ -233,12 +234,18 @@ export default {
     ...mapActions(useCastingsStore, ['createCasting', 'getCasting', 'updateCasting', 'deleteCasting', 'load']),
     async onSubmit() {
       try {
-        if (this.form['id']) {
-          await this.updateCasting(this.form);
+        const formData = new FormData();
+        for (const key in this.form) {
+          formData.append(key, this.form[key]);
+        }
+        console.log('uppppp')
+        if (formData.get('id')) {
+          console.log('update')
+          await this.updateCasting(formData);
         } else {
-          this.form['casting_owner'] = this.user.id
-          // this.form['main_photo'] = this.form['main_photo'].name
-          await this.createCasting(this.form);
+          console.log('create')
+          formData.append('casting_owner', this.user.id);
+          await this.createCasting(formData);
         }
         await nextTick(() => this.$router.push({name: 'menu'}));
       } catch (e) {
@@ -269,7 +276,7 @@ export default {
         ...this.tags.map(x => ({value: x.id, text: x.title}))
       ]
     },
-      sex() {
+    sex() {
       return [
         {value: null, text: "Выберите пол"},
         {value: "male", text: "Мужской"},
