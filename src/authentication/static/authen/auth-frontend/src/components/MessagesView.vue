@@ -3,7 +3,6 @@
     <div>
       <b-card title="Какой кастинг вы хотите обсудить?">
       <b-form-group
-          label="Выберите кастинг:"
       >
         <b-form-select
             v-model="noteId"
@@ -25,6 +24,7 @@
     <b-card class="page-footer" title="Введите ваше сообщение">
   <form @submit.prevent="sendMessage">
     <b-input placeholder="Сообщение" v-model="message"/>
+    <br>
     <b-button type="submit" variant="primary" >Отправить</b-button>
   </form>
     </b-card>
