@@ -10,6 +10,7 @@
         <b-nav-item v-if="isAuth && isEmployer" :to="{name: 'castingform'}">Создать кастинг</b-nav-item>
         <b-nav-item v-if="!isAuth" :to="{name: 'login'}">Вход</b-nav-item>
         <b-nav-item v-if="!isAuth" :to="{name: 'registration'}">Регистрация</b-nav-item>
+        <b-nav-item v-if="isAuth" :to="{name: 'messages'}">Форум</b-nav-item>
 
 
       </b-navbar-nav>

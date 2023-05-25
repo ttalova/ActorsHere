@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-alert variant="danger" show v-if="error">{{ error }}</b-alert>
+    <b-alert variant="danger" show v-if="error">Такой аккаунт не существует!</b-alert>
     <b-alert variant="success" show v-if="success">{{ success }}</b-alert>
     <h1>Восстановление пароля</h1>
     <b-form @submit.prevent="onSubmit">

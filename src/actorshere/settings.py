@@ -39,12 +39,16 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
+    "channels_postgres",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "rest_framework",
     "authentication",
     "core_app",
@@ -56,7 +60,6 @@ INSTALLED_APPS = [
     "drf_yasg",
     "django_filters",
     "corsheaders",
-    "django.contrib.sites",
     "allauth.socialaccount.providers.google",
     "allauth",
     "allauth.account",
@@ -94,19 +97,27 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "actorshere.wsgi.application"
+ASGI_APPLICATION = "actorshere.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+default_database = {
+    "ENGINE": "django.db.backends.postgresql",
+    "NAME": os.environ.get("DB_NAME"),
+    "USER": os.environ.get("DB_USER"),
+    "PASSWORD": os.environ.get("DB_PASSWORD"),
+    "HOST": os.environ.get("DB_HOST"),
+    "PORT": 5432,
+}
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME"),
-        "USER": os.environ.get("DB_USER"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST": os.environ.get("DB_HOST"),
-        "PORT": 5432,
-    }
+    "default": default_database,
+    "channels_postgres": default_database,
+}
+
+CHANNEL_LAYERS = {
+    "default": {"BACKEND": "channels_postgres.core.PostgresChannelLayer", "CONFIG": default_database},
 }
 
 # Password validation
@@ -166,7 +177,6 @@ SWAGGER_SETTINGS = {
 }
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
-
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",

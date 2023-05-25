@@ -123,6 +123,11 @@ const router = createRouter({
             name: 'settings',
             component: () => import('../components/SettingsView.vue'),
         },
+        {
+            path: '/messages',
+            name: 'messages',
+            component: () => import('../components/MessagesView.vue'),
+        },
 
     ]
 });

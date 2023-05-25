@@ -279,32 +279,6 @@ class CastingsView(ModelViewSet):
         return Response(modified_data)
 
 
-# def ForgetPassword(request):
-#     try:
-#         if request.method == 'POST':
-#             email = request.POST.get('email')
-#             if not User.objects.filter(email=email).first():
-#                 return Response(status=status.HTTP_404_NOT_FOUND)
-#
-#             user_obj = User.obgects.get(email=email)
-#             token = str(uuid.uuid4())
-#             send_forget_password_mail(user_obj, token)
-#             return Response(status=status.HTTP_200_OK)
-#     except Exception as e:
-#         return Response(status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# def ChangePassword(request, token):
-#     context = {}
-#     try:
-#         profile_obj = Profile.objects.get(send_forget_password = token)
-#         print(profile_obj)
-#         return Response(status=status.HTTP_200_OK)
-#     except Exception as e:
-#         return Response(status=status.HTTP_400_BAD_REQUEST)
-#
-
-
 class ProfileViewSet(APIView):
     permission_classes = (AllowAny,)
     serializer_class = ChangePasswordSerializer
@@ -506,31 +480,6 @@ class UserSettingsViewSet(ModelViewSet):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-# @api_view()
-# def github_login(request):
-#     if request.method == "POST":
-#         code = list(request.POST.keys())
-#         print('code', code)
-#         data = {
-#             "client_id": "127209d5c60d083ef3ec",
-#             "client_secret": "aa80fbe3d310c115788a1452464ba66cdb0eb37a",
-#             "code": code,
-#             "redirect_uri": "http://localhost:5173/login_github/",
-#         }
-#         headers = {"Accept": "application/json"}
-#         response = requests.post("https://github.com/login/oauth/access_token", data=data, headers=headers)
-#         # access_token = response.json()["access_token"]
-#         # headers = {"Authorization": f"Bearer {access_token}"}
-#         # userResponse = requests.get("https://api.github.com/user", headers=headers)
-#         # email = userResponse.json()["email"]
-#         # if email is None:
-#         #     login = userResponse.json()["login"]
-#         #     email = f"{login}@mail.ru"
-#         # password = userResponse.json()["node_id"]
-#         # return JsonResponse({"email": email, "password": password})
-#     return JsonResponse({"email": "error"})
-
-
 class GithubLoginViewSet(ViewSet):
     permission_classes = (AllowAny,)
 
@@ -553,6 +502,5 @@ class GithubLoginViewSet(ViewSet):
                 login = userResponse.json()["login"]
                 email = f"{login}@mail.ru"
             password = userResponse.json()["node_id"]
-            print(email, password)
             return JsonResponse({"email": email, "password": password})
         return JsonResponse({"email": "error"})
