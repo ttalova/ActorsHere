@@ -31,6 +31,7 @@ attrs = "^23.1.0"
 social-auth-app-django = "^5.2.0"
 channels = {extras = ["daphne"], version = "^4.0.0"}
 channels-postgres = "^0.0.5"
+coverage = "^7.2.6"
 
 
 [tool.poetry.group.dev.dependencies]

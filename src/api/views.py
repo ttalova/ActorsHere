@@ -375,7 +375,7 @@ class FavoritesActorViewSet(ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["GET"], url_path="get_like_by_user_and_actor")
     def get_like_by_user_and_actor(self, request, *args, **kwargs):
