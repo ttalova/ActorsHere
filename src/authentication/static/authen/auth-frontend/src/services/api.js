@@ -15,6 +15,9 @@ instance.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
+
+
+
 export async function login(email, password) {
     const response = await instance.post('/auth/jwt/create/', {email, password})
     if (response.status === 500) {
@@ -26,6 +29,18 @@ export async function login(email, password) {
 
     return response.data;
 }
+
+export async function loginGitHub(code) {
+    const response = await instance.post('/auth_github/', code)
+    if (response.status === 500) {
+        throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
+    }
+    if ([400, 401].includes(response.status)) {
+        throw new Error('Некорректные учетные данные');
+    }
+    return response.data;
+}
+
 export async function forgetPassword(email) {
     const response = await instance.post('/api/forget-password', {email})
     if (response.status === 500) {
@@ -49,6 +64,7 @@ export async function changePassword(token, password_first, password_second) {
 }
 
 export async function registration(email, password) {
+    console.log('registr', email, password)
     const response = await instance.post('/api/registr/', {email, password});
     if (response.status === 500) {
         throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
@@ -138,7 +154,8 @@ export async function actorform(params) {
 }
 
 export async function updateactorform(params) {
-    const response = await instance.put(`/api/actors/${params.id}/`, params);
+    // const response = await instance.put(`/api/actors/${params.get('id')}/`, params);
+    const response = await instance.put(`/api/actors/${params['id']}/`, params);
     if (response.status === 500) {
         throw new Error("Произошла неизвестная ошибка, попробуйте еще раз");
     }

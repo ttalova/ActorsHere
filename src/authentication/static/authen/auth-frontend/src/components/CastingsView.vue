@@ -4,6 +4,7 @@
   <b-alert v-if="error" variant="danger" show>{{ error }}</b-alert>
   <b-list-group>
     <b-list-group-item v-for="casting in results" :key="casting.id">
+       <img v-if="casting.photo" :src="`${casting.photo}`" style="width:50%" alt="img" class="card-img-top">
       <p>{{ casting.header }}</p>
       <p>{{ casting.city }}</p>
       <p>{{ casting.fee }}</p>

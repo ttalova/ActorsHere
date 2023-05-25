@@ -4,6 +4,7 @@
   <b-alert v-if="error" variant="danger" show>{{ error }}</b-alert>
   <b-list-group>
     <b-list-group-item v-for="actor in results" :key="actor.id">
+       <img v-if="actor.photo" :src="`${actor.photo}`" style="width:50%" alt="img" class="card-img-top">
       <p>{{ actor.full_name }}</p>
       <p>{{ actor.education }}</p>
       <p>{{ actor.skills }}</p>

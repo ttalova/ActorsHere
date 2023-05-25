@@ -25,6 +25,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+from api.views import GithubLoginViewSet
+
 schema_view = get_schema_view(
     openapi.Info(
         title="ActorsHere API",
@@ -43,6 +45,7 @@ urlpatterns = [
     path("test/", include("core_app.urls")),
     path("api/", include("api.urls")),
     path("admin/", admin.site.urls),
+    path("auth_github/", GithubLoginViewSet.as_view({"post": "create"})),
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
     path(

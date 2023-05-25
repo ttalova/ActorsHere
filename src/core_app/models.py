@@ -123,7 +123,7 @@ class ActorProfile(models.Model):
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     full_name = models.CharField()
-    main_photo = models.ImageField(blank=True, null=True, upload_to="images")
+    photo = models.ImageField(blank=True, null=True, upload_to="images")
     birthdate = models.DateField()
     # video_business_card = models.CharField()
     figure_parameters = models.CharField(blank=True, null=True)

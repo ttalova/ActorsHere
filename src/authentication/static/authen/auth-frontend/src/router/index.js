@@ -31,6 +31,12 @@ const router = createRouter({
             props: true,
         },
         {
+            path: '/login_github',
+            name: 'login_github',
+            component: () => import('../components/LoginGitHubView.vue'),
+             meta: {unauthorizedAccess: true},
+        },
+        {
             path: '/profile',
             name: 'profile',
             component: () => import('../views/ProfileView.vue')
@@ -55,7 +61,7 @@ const router = createRouter({
             meta: {unauthorizedAccess: true},
             props: true,
         },
-         {
+        {
             path: '/actorform',
             name: 'actorForm',
             component: () => import('../components/ActorFormComponent.vue'),
@@ -68,13 +74,13 @@ const router = createRouter({
         {
             path: '/castingform/',
             name: 'castingform',
-             props: true,
+            props: true,
             component: () => import('../components/CastingFormView.vue'),
         },
         {
             path: '/castingform/:id',
             name: 'castingformbyid',
-             props: true,
+            props: true,
             component: () => import('../components/CastingFormView.vue'),
         },
         {

@@ -6,6 +6,7 @@
         style="max-width: 200rem;"
         class="mb-2"
     >
+       <img v-if="this.results.photo" :src="`${this.results.photo}`" style="width:50%" alt="img" class="card-img-top">
       <b-card-title>
         {{ this.results.full_name }}
       </b-card-title>

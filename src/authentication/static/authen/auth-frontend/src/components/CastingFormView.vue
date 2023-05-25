@@ -238,12 +238,9 @@ export default {
         for (const key in this.form) {
           formData.append(key, this.form[key]);
         }
-        console.log('uppppp')
         if (formData.get('id')) {
-          console.log('update')
           await this.updateCasting(formData);
         } else {
-          console.log('create')
           formData.append('casting_owner', this.user.id);
           await this.createCasting(formData);
         }

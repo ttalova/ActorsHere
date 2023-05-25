@@ -1,7 +1,10 @@
 import uuid
 
+import requests
 from allauth.socialaccount.models import SocialApp
 from django.core.files.storage import default_storage
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import F
 from djoser.serializers import UserSerializer
@@ -13,7 +16,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet, ViewSet
 
 from api.email_function import send_forget_password_mail
 from api.filters import ActorsFilter
@@ -113,6 +116,9 @@ class ActorsView(ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
+        data = request.data.copy()
+        if data["photo"] == "null":
+            data.pop("photo")
         serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -498,3 +504,55 @@ class UserSettingsViewSet(ModelViewSet):
             return Response(status=status.HTTP_201_CREATED)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view()
+# def github_login(request):
+#     if request.method == "POST":
+#         code = list(request.POST.keys())
+#         print('code', code)
+#         data = {
+#             "client_id": "127209d5c60d083ef3ec",
+#             "client_secret": "aa80fbe3d310c115788a1452464ba66cdb0eb37a",
+#             "code": code,
+#             "redirect_uri": "http://localhost:5173/login_github/",
+#         }
+#         headers = {"Accept": "application/json"}
+#         response = requests.post("https://github.com/login/oauth/access_token", data=data, headers=headers)
+#         # access_token = response.json()["access_token"]
+#         # headers = {"Authorization": f"Bearer {access_token}"}
+#         # userResponse = requests.get("https://api.github.com/user", headers=headers)
+#         # email = userResponse.json()["email"]
+#         # if email is None:
+#         #     login = userResponse.json()["login"]
+#         #     email = f"{login}@mail.ru"
+#         # password = userResponse.json()["node_id"]
+#         # return JsonResponse({"email": email, "password": password})
+#     return JsonResponse({"email": "error"})
+
+
+class GithubLoginViewSet(ViewSet):
+    permission_classes = (AllowAny,)
+
+    def create(self, request):
+        if request.method == "POST":
+            code = list(request.POST.keys())
+            data = {
+                "client_id": "127209d5c60d083ef3ec",
+                "client_secret": "aa80fbe3d310c115788a1452464ba66cdb0eb37a",
+                "code": code,
+                "redirect_uri": "http://localhost:5173/login_github/",
+            }
+            headers = {"Accept": "application/json"}
+            response = requests.post("https://github.com/login/oauth/access_token", data=data, headers=headers)
+            access_token = response.json()["access_token"]
+            headers = {"Authorization": f"Bearer {access_token}"}
+            userResponse = requests.get("https://api.github.com/user", headers=headers)
+            email = userResponse.json()["email"]
+            if email is None:
+                login = userResponse.json()["login"]
+                email = f"{login}@mail.ru"
+            password = userResponse.json()["node_id"]
+            print(email, password)
+            return JsonResponse({"email": email, "password": password})
+        return JsonResponse({"email": "error"})

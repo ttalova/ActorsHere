@@ -31,6 +31,7 @@
 <!--      </b-button>-->
    <b-button type="submit" variant="primary">Войти</b-button>
       <b-button type="submit" variant="primary" :to="{name: 'forgetPassword'}">Забыл пароль</b-button>
+      <b-button type="submit" variant="primary" @click="GitHubLogin">Войти через GitHub</b-button>
     </b-form>
   </div>
 </template>
@@ -63,6 +64,9 @@ export default {
       await this.login(this.form.email, this.form.password);
       await nextTick(() => this.$router.push({name: 'profile'}));
     },
+    async GitHubLogin() {
+       window.location.href = 'https://github.com/login/oauth/authorize?client_id=127209d5c60d083ef3ec&redirect_uri=http://localhost:5173/login_github/&scope=user:email';
+    }
     // async handlerSignInGoogle() {
     //   try {
     //     const googleUser = await this.$gAuth.signIn();

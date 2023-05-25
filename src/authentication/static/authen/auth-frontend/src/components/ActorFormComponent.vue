@@ -2,7 +2,7 @@
   <div>
     <b-alert variant="danger" show v-if="error">{{ error }}</b-alert>
     <h1>Заполните анкету актера!</h1>
-    <b-form @submit.prevent="onSubmit">
+    <b-form @submit.prevent="onSubmit" enctype="multipart/form-data">
       <b-row>
         <b-col md="6">
           <input type="hidden" name="hidden_field" v-model="form.id">
@@ -20,8 +20,9 @@
           <b-form-group
               label="Ваша фотография:">
             <b-form-file
-                v-model="form.main_photo"
-                :state="Boolean(file1)"
+                name="photo"
+                v-model="form.photo"
+                :state="Boolean(form.photo)"
                 placeholder="Выберите файл или перенесите его сюда..."
                 drop-placeholder="Drop file here..."
             ></b-form-file>
@@ -321,16 +322,32 @@ export default {
       }
     },
     ...mapActions(useActorsStore, ['createactor', 'getMyForm', 'updateformactor', 'deleteMyForm']),
+    // async onSubmit() {
+    //   try {
+    //     const formData = new FormData();
+    //     for (const key in this.form) {
+    //       formData.append(key, this.form[key]);
+    //     }
+    //     if (formData.get('id')) {
+    //       await this.updateformactor(formData);
+    //     } else {
+    //       formData.append('user', this.user.id);
+    //       await this.createactor(formData);
+    //     }
+    //     await nextTick(() => this.$router.push({name: 'profile'}));
+    //   } catch(e) {
+    //     this.error = e.message
+    //   }
+    //   },
     async onSubmit() {
       try {
         if (this.form['id']) {
           await this.updateformactor(this.form);
         } else {
           this.form['user'] = this.user.id
-          // this.form['main_photo'] = this.form['main_photo'].name
           await this.createactor(this.form);
         }
-        await nextTick(() => this.$router.push({name: 'menu'}));
+        await nextTick(() => this.$router.push({name: 'profile'}));
       } catch(e) {
         this.error = e.message
       }

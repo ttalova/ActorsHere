@@ -33,7 +33,7 @@ export default {
     ...mapActions(useAuthStore, ['logout']),
     logoutClickHandler() {
       this.logout();
-      this.$router.push({name: "actors"});
+       this.$router.push({name: "menu"});
     },
     createActorForm() {
       this.$router.push({name: "actorForm"});
