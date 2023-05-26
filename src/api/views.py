@@ -2,12 +2,9 @@ import uuid
 
 import requests
 from allauth.socialaccount.models import SocialApp
-from django.core.files.storage import default_storage
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import F
-from djoser.serializers import UserSerializer
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
@@ -66,16 +63,6 @@ class RegistrUserView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.create(serializer.validated_data)
         return Response(status=status.HTTP_201_CREATED)
-
-
-@api_view()
-def status_view(request):
-    return Response(StatusSerializer({"status": "ok"}).data)
-
-
-# permission_classes = (ISAuthenticated)
-#   serializer_class = LoginSerializer
-#   renderer_classes = (TokenAuthentication)
 
 
 @swagger_auto_schema(method="GET", responses={status.HTTP_200_OK: ProfileSerializer()})
@@ -468,7 +455,6 @@ class UserSettingsViewSet(ModelViewSet):
         new_email = request.data.get("new_email")
         password = request.data.get("password")
 
-        # Проверка соответствия текущей почты и пароля
         if instance.email == current_email and instance.check_password(password):
             instance.email = new_email
             instance.save()

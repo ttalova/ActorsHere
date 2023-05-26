@@ -3,7 +3,6 @@ from rest_framework.routers import SimpleRouter
 
 from api.views import (
     RegistrUserView,
-    status_view,
     profile_view,
     ActorsView,
     TagsViewSet,
@@ -37,7 +36,6 @@ router.register("settings", UserSettingsViewSet, basename="settings"),
 
 urlpatterns = [
     path("registr/", RegistrUserView.as_view(), name="registr"),
-    path("status/", status_view, name="status"),
     path("profile/", profile_view, name="profile"),
     path("forget-password", ProfileViewSet.as_view()),
     path("change-password/<str:token>/", UpdatePasswordViewSet.as_view()),
