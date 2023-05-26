@@ -17,15 +17,6 @@
                 required
             ></b-form-input>
           </b-form-group>
-          <b-form-group
-              label="Фотография:">
-            <b-form-file
-                v-model="form.photo"
-                :state="Boolean(file1)"
-                placeholder="Выберите файл или перенесите его сюда..."
-                drop-placeholder="Drop file here..."
-            ></b-form-file>
-          </b-form-group>
 
           <b-form-group
               label="Специализация компании:"
@@ -179,10 +170,10 @@ export default {
           await this.updateformemployer(this.form);
         } else {
           this.form['user'] = this.user.id
-          // this.form['main_photo'] = this.form['main_photo'].name
           await this.createemployer(this.form);
         }
-        await nextTick(() => this.$router.push({name: 'menu'}));
+        await nextTick(() => this.$router.push({name: 'profile'}));
+         location.reload()
       } catch (e) {
         this.error = e.message
       }
@@ -191,6 +182,7 @@ export default {
       try {
         await this.deleteMyFormEmployer(this.form['id'])
         await nextTick(() => this.$router.push({name: 'menu'}));
+         location.reload()
       } catch (e) {
         console.log(e)
       }

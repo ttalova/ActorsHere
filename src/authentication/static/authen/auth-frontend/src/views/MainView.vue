@@ -9,15 +9,15 @@
   </b-button>
 </div>
   <main>
-    <b-row>
+    <b-row v-if="getList==='actors'">
       <b-col md="9">
             <ActorsView v-if="getList==='actors'"/>
-        <CastingsView v-if="getList==='castings'"/>
       </b-col>
       <b-col md="3">
         <FiltersActorContainer v-if="getList==='actors'" @submit="submit"/>
       </b-col>
     </b-row>
+    <CastingsView v-if="getList==='castings'"/>
   </main>
 </template>
 

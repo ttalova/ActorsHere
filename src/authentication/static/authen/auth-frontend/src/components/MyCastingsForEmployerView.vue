@@ -18,6 +18,7 @@
     style="max-width: 20rem;"
     class="mb-2"
   >
+    <img v-if="casting.photo" :src="`http://127.0.0.1:8000${casting.photo}`" style="width:50%" alt="img" class="card-img-top">
     <b-card-title>
       {{casting.header}}
     </b-card-title>

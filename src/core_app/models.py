@@ -46,7 +46,6 @@ class EmployerProfile(models.Model):
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=255)
-    photo = models.ImageField(blank=True, null=True, upload_to="images")
     company_specialization = models.CharField(choices=SPECIALIZATION, max_length=1000)
     description = models.CharField(max_length=1000)
     approximate_location = models.CharField(max_length=1000)
