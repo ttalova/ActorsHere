@@ -9,6 +9,9 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.test import APIClient, APIRequestFactory
 from api.serializers import (
     UserRegistrSerializer,
+    FavoritesCastingSerializer,
+    FavoritesActorSerializer,
+    StatusSerializer,
     ProfileSerializer,
 )
 from api.views import (
@@ -21,7 +24,7 @@ from api.views import (
     EmployersView,
     CastingsView,
     ProfileViewSet,
-    # status_view,
+    status_view,
     profile_view,
 )
 from authentication.models import User
@@ -352,6 +355,20 @@ class ResponseViewSetTestCase(unittest.TestCase):
     def test_get_response_by_actor_with_invalid_pk(self):
         response = self.client.get("/api/response/1000/get_response_by_actor/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class StatusViewTestCase(unittest.TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.get(id=1)
+        self.client.force_authenticate(user=self.user)
+        self.factory = APIRequestFactory()
+
+    def test_status_view(self):
+        request = self.factory.get("/api/status/")
+        response = status_view(request)
+        serializer = StatusSerializer({"status": "ok"})
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class ProfileViewTestCase(unittest.TestCase):
