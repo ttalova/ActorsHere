@@ -13,7 +13,8 @@
   <b-alert v-if="error" variant="danger" show>{{ error }}</b-alert>
   <b-list-group>
     <b-list-group-item v-for="casting in filteredCastings" :key="casting.id">
-      <p>{{ casting.header }}</p>
+      <img v-if="casting.photo" :src="`http://127.0.0.1:8000${casting.photo}`" style="width:50%" alt="img" class="card-img-top">
+     <p>{{ casting.header }}</p>
       <p>{{ casting.city }}</p>
       <p>{{ casting.fee }}</p>
       <p>{{casting.end_of_application}}</p>

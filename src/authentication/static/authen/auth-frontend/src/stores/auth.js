@@ -97,7 +97,8 @@ export const useAuthStore = defineStore('auth', {
         async getNotes() {
             this.isLoading = true;
             try {
-                this.notifications = await getNotifications().results;
+                this.notifications = await getNotifications();
+                this.notifications = this.notifications.results;
             } catch (e) {
                 console.log(e.message);
             }

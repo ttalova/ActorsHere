@@ -11,13 +11,24 @@
       <b-card-title>
         {{ this.results.header }}
       </b-card-title>
-      <b-card-text>
-        <p>{{ this.results.fee }}</p>
-      </b-card-text>
+       <b-card-text>
+        <p><strong>Гонорар:</strong> {{ this.results.fee }}</p>
+        <p><strong>Описание:</strong> {{ this.results.description }}</p>
+        <p><strong>Пол:</strong> {{ this.results.sex }}</p>
+        <p><strong>Опыт работы:</strong> {{ this.results.experience }}</p>
+        <p><strong>Email:</strong> {{ this.results.contact_email }}</p>
+        <p><strong>Социальные сети:</strong> {{ this.results.social_network }}</p>
+        <p><strong>Описание типа актера:</strong> {{ this.results.actor_type_description }}</p>
+        <p><strong>Минимальный возраст актера:</strong> {{ this.results.min_actor_age }}</p>
+        <p><strong>Максимальный возраст актера:</strong> {{ this.results.max_actor_age }}</p>
+        <p><strong>Крайний срок подачи заявок:</strong> {{ this.results.end_of_application }}</p>
+        <p><strong>Дата мероприятия:</strong> {{ this.results.date_of_event }}</p>
+        <p><strong>Телефон:</strong> {{ this.results.phone_number }}</p>
+         </b-card-text>
       <b-button v-if="this.canEdit===this.results.casting_owner" :to="{ name: 'castingformbyid', params: { id: this.results.id }}"
                 variant="primary">Редактировать
       </b-button>
-      <b-button v-if="this.isActor && this.isAuth" @click.prevent="responseHandler"
+      <b-button v-if="value" @click.prevent="responseHandler"
                 variant="primary"> {{responseStatus}}
       </b-button>
       <LikeButtonComponent v-if="isAuth" @clickLike="clickLike" :like="this.like"/>
@@ -51,15 +62,19 @@ export default {
       like_id: null,
       resp: null,
       resp_id: null,
-      responseStatus: null
+      responseStatus: null,
+      value: false
     }
   },
   created() {
     this.load(this.id)
     this.getEditMode()
-    this.loading()
-    if (this.isActor) {
+    this.respCan()
+    if (this.user) {
+       this.loading()
+      if (this.isActor) {
       this.loadingResponse()
+    }
     }
   },
   methods: {
@@ -96,6 +111,13 @@ export default {
         } catch (e) {
           this.error = e.message
         }
+      }
+    },
+    respCan() {
+      if (this.user){
+         this.value = this.isActor && this.isAuth
+      } else {
+        this.value = false
       }
     },
     async loading() {

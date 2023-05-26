@@ -117,9 +117,8 @@ class ActorsView(ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         data = request.data.copy()
-        if data["photo"] == "null":
-            data.pop("photo")
-        serializer = self.serializer_class(instance=self.get_object(), data=request.data, partial=True)
+        data.pop("photo")
+        serializer = self.serializer_class(instance=self.get_object(), data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -180,7 +179,6 @@ class ClientSet(mixins.ListModelMixin, GenericViewSet):
 
 class EmployersView(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
-    # filterset_class = ActorsFilter
     permission_classes = (AllowAny,)
     serializer_class = EmployersSerializer
     queryset = EmployerProfile.objects.all()
@@ -214,7 +212,6 @@ class EmployersView(ModelViewSet):
 
 class CastingsView(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
-    # filterset_class = ActorsFilter
     permission_classes = (AllowAny,)
     serializer_class = CastingsSerializer
     queryset = Casting.objects.all()
@@ -257,8 +254,8 @@ class CastingsView(ModelViewSet):
         instance = self.get_object()
         data = request.data.copy()
         data["casting_owner"] = EmployerProfile.objects.get(user_id=request.user.id).id
-        if data["photo"] == "null":
-            data.pop("photo")
+        # if data["photo"] == "null":
+        #     data.pop("photo")
         serializer = self.serializer_class(instance=instance, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()

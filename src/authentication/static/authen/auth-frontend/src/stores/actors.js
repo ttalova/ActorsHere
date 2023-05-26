@@ -25,7 +25,8 @@ export const useActorsStore = defineStore('actors', {
                 tag_id: null
             },
             form: {},
-            like_info: null
+            like_info: null,
+            actorIdVar: null
         }
     },
     actions: {
@@ -41,7 +42,9 @@ export const useActorsStore = defineStore('actors', {
         },
         async getMyForm(user_id) {
             try {
-                return await getActorForm(user_id)
+                const variant = await getActorForm(user_id)
+                this.actorIdVar =variant.id
+                return variant
             } catch(e) {
                 console.log(e)
             }

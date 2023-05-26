@@ -348,6 +348,7 @@ export default {
           await this.createactor(this.form);
         }
         await nextTick(() => this.$router.push({name: 'profile'}));
+        location.reload()
       } catch(e) {
         this.error = e.message
       }
@@ -356,6 +357,7 @@ export default {
       try {
         await this.deleteMyForm(this.form['id'])
         await nextTick(() =>this.$router.push({name: 'menu'}));
+        location.reload()
       } catch(e) {
         console.log(e)
       }

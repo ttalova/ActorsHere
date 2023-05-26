@@ -2,15 +2,20 @@
   <h1 v-if="!favorites">Актеры</h1>
   <b-spinner v-if="isLoading"/>
   <b-alert v-if="error" variant="danger" show>{{ error }}</b-alert>
-  <b-list-group>
-    <b-list-group-item v-for="actor in results" :key="actor.id">
-       <img v-if="actor.photo" :src="`${actor.photo}`" style="width:50%" alt="img" class="card-img-top">
+  <b-row>
+  <b-col md="4" v-for="actor in results" :key="actor.id">
+    <b-list-group-item>
+      <img v-if="actor.photo && favorites" :src="`http://127.0.0.1:8000${actor.photo}`" style="width:100%" alt="img" class="card-img-top">
+       <img v-if="actor.photo && !favorites" :src="`${actor.photo}`" style="width:100%" alt="img" class="card-img-top">
+
+<!--      <img v-if="actor.photo" :src="`${actor.photo}`" style="width:100%; height:220px; object-fit: cover;" alt="img" class="card-img-top">-->
       <p>{{ actor.full_name }}</p>
       <p>{{ actor.education }}</p>
       <p>{{ actor.skills }}</p>
-    <b-button :to="{ name: 'actorcard', params: { id: actor.id }}" variant="primary">Просмотр</b-button>
+      <b-button :to="{ name: 'actorcard', params: { id: actor.id }}" variant="primary">Просмотр</b-button>
     </b-list-group-item>
-  </b-list-group>
+  </b-col>
+</b-row>
 </template>
 
 <script>
